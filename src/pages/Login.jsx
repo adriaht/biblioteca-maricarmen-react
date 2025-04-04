@@ -61,7 +61,7 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos }) {
 
         if (data.grupos.includes("Bibliotecario")) {
           setRole("bibliotecario");
-        } else if (data.grupos.includes("Usuari")) {
+        } else if (data.grupos.includes("usuari")) {
           setRole("usuari");
         } else {
           setRole("guest");

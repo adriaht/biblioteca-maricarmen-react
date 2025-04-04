@@ -4,16 +4,19 @@ import Button from "./Button";
 function Sidebar({ onPerfilClick, style, ...others }) {
   return (
     <div
-      style={{
+    style={{
         position: "fixed",
         top: 0,
         right: 0,
-        width: "100px",
+        width: "120px",
         height: "auto",
         backgroundColor: "#f0f0f0",
-        boxShadow: "-2px 0 5px rgba(0,0,0,0.3)",
-        padding: "1rem",
-        ...style,
+        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+        padding: "10px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        zIndex: 999,
       }}
       {...others}
     >

@@ -37,12 +37,8 @@ function App() {
   let content;
 
   if (page === "editProfile") {
-    content = (
-      <Perfil
-        userData={{ username: user, grupos }}
-        onBack={handleBackToHome}
-      />
-    );
+    content =  <Perfil username={user} onBack={handleBackToHome} />;
+
   } else if (role === "bibliotecario") {
     content = (
       <BibliotecarioView
@@ -56,7 +52,7 @@ function App() {
       <UsuarioView
         username={user}
         grupos={grupos}
-        onPerfilClick={handleNavigateToEditProfile}
+        goToPerfil={handleNavigateToEditProfile}
       />
     );
   } else {
