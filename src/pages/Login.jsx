@@ -1,4 +1,4 @@
-// src/pages/LoginPage.jsx
+// src/pages/Login.jsx
 import { useState, useEffect } from "react";
 import LabelInput from "../components/LabelInput";
 import Button from "../components/Button";
@@ -12,6 +12,7 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos }) {
   const [password, setPasswordLocal] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [localGrupos, setLocalGrupos] = useState([]);
+  const [token, setToken] = useState(""); // Para almacenar el token
 
   // Cargar credenciales desde localStorage
   useEffect(() => {
@@ -59,6 +60,12 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos }) {
         setAuthenticated(true);
         setGrupos(data.grupos);
 
+        // Asignar token y mostrarlo
+        const receivedToken = data.token;  // Aquí supongo que el token viene en data.token
+        console.log("Token recibido:", receivedToken);
+        setToken(receivedToken); // Guardar el token en el estado local
+
+        // Definir el rol según los grupos del usuario
         if (data.grupos.includes("Bibliotecario")) {
           setRole("bibliotecario");
         } else if (data.grupos.includes("usuari")) {
