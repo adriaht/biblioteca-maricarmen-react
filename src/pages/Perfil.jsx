@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import Paragraph from "../components/Paragraph";
+import LabelInput from "../components/LabelInput";
 
 function Perfil({ username, onBack }) {
   const [profileData, setProfileData] = useState(null);
@@ -22,6 +23,7 @@ function Perfil({ username, onBack }) {
         return res.json();
       })
       .then((data) => {
+        console.log(data.imatge);
         setProfileData(data);
         setFormData(data);
       })
@@ -31,6 +33,8 @@ function Perfil({ username, onBack }) {
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+  
 
   const handleSave = async () => {
     setMessage("");
@@ -71,23 +75,63 @@ function Perfil({ username, onBack }) {
   if (!profileData) return <Paragraph>Cargando perfil...</Paragraph>;
 
   return (
-    <div>
+    <div className="perfil" style={{ width: "700px" }}>
       <Header level={2}>Editar perfil de {profileData.username}</Header>
 
-      <label>Nombre:</label>
-      <input name="nombre" value={formData.nombre || ""} onChange={handleChange} />
+      {profileData.imatge ? (
+        <img
+          src={`http://127.0.0.1:8000${profileData.imatge}`}
+          alt="Imagen de perfil"
+          width="100px"
+          height="100px"
+          style={{
+            borderRadius: "50%",
+            objectFit: "cover"
+          }}
+        />
+      ) : (
+        <p>No hay imagen de perfil</p>
+      )}
 
-      <label>Email:</label>
-      <input name="email" value={formData.email || ""} onChange={handleChange} />
+      <LabelInput
+        label="Nombre:"
+        name="nombre"
+        type="text"
+        value={formData.nombre || ""}
+        onChange={handleChange}
+      />
 
-      <label>Centro:</label>
-      <input name="centre" value={formData.centre || ""} onChange={handleChange} />
+      <LabelInput
+        label="Email:"
+        name="email"
+        type="email"
+        value={formData.email || ""}
+        onChange={handleChange}
+      />
 
-      <label>Ciclo:</label>
-      <input name="cicle" value={formData.cicle || ""} onChange={handleChange} />
+      <LabelInput
+        label="Centro:"
+        name="centre"
+        type="text"
+        value={formData.centre || ""}
+        onChange={handleChange}
+      />
 
-      <label>Teléfono:</label>
-      <input name="telefon" value={formData.telefon || ""} onChange={handleChange} />
+      <LabelInput
+        label="Ciclo:"
+        name="cicle"
+        type="text"
+        value={formData.cicle || ""}
+        onChange={handleChange}
+      />
+
+      <LabelInput
+        label="Teléfono:"
+        name="telefon"
+        type="tel"
+        value={formData.telefon || ""}
+        onChange={handleChange}
+      />
 
       {message && <Paragraph>{message}</Paragraph>}
 

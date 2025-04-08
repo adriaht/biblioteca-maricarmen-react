@@ -18,6 +18,7 @@ function LabelInput({
                 autoComplete={autoComplete}
                 style={{ display: "block", padding: "0.5rem", width: "100%" }}
             />
+            <br />
         </div>
     );
 }

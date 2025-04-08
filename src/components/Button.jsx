@@ -3,11 +3,12 @@ function Button({ text, onClick,  ...others }) {
         <button
           onClick={onClick}
           type="button"
-          style={{ padding: "0.5rem 1rem" }}
+          style={{ padding: "0.5rem 1rem", margin: "0.5rem" }}
           {...others}
         >
           {text}
         </button>
+      
       );
     };
     

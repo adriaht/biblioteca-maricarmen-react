@@ -4,15 +4,16 @@ import LabelInput from "../components/LabelInput";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import Paragraph from "../components/Paragraph";
+import Sidebar from "../components/Sidebar";
 
-function Login({ setAuthenticated, setUser, setRole, setGrupos }) {
+function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCatalag }) {
   console.log("Login iniciado ...");
 
   const [username, setUsernameLocal] = useState("");
   const [password, setPasswordLocal] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [localGrupos, setLocalGrupos] = useState([]);
-  const [token, setToken] = useState(""); // Para almacenar el token
+ 
 
   // Cargar credenciales desde localStorage
   useEffect(() => {
@@ -68,10 +69,13 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos }) {
         // Definir el rol según los grupos del usuario
         if (data.grupos.includes("Bibliotecario")) {
           setRole("bibliotecario");
+          setErrorMessage("");
         } else if (data.grupos.includes("usuari")) {
           setRole("usuari");
+          setErrorMessage("");
         } else {
           setRole("guest");
+          setErrorMessage("");
         }
       } else {
         throw new Error("Usuario no encontrado");
@@ -84,7 +88,7 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos }) {
   };
 
   return (
-    <div>
+    <div id="login_page">
       <Header level={2}>Login</Header>
       <LabelInput
         label="Username"
@@ -94,6 +98,7 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos }) {
         onChange={(e) => setUsernameLocal(e.target.value)}
         autoComplete="username"
       />
+      <br />
       <LabelInput
         label="Password"
         type="password"

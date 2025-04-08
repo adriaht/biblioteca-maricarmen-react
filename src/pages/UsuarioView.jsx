@@ -4,10 +4,9 @@ import Paragraph from "../components/Paragraph";
 import Button from "../components/Button";
 import Sidebar from "../components/Sidebar";
 
-function UsuariView({ username, grupos, goToPerfil }) {
+function UsuariView({ username, grupos,  }) {
     return (
       <div>
-        <Sidebar onPerfilClick={goToPerfil} />
         <Header level={2}>Hola, {username} (Usuari)</Header>
         <Paragraph>Grupos: {grupos.join(", ")}</Paragraph>
       </div>
