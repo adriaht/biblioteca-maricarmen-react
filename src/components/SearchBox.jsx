@@ -48,7 +48,7 @@ function SearchBox({ books, onSearch }) {
           placeholder="Cercar llibres per titol o autor..."
           value={searchTerm}
           onChange={handleInputChange}
-          className="search-input"
+          className="search-input search-box-color"
         />
         <button type="submit" className="search-button">
           Cercar

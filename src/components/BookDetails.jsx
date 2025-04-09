@@ -30,7 +30,7 @@ function BookDetails() {
       </Link>
 
       <div className="book-details-card">
-        <h2 className="details-title">Detalls del llibre</h2>
+        <h2 className="details-title h2">Detalls del llibre</h2>
         
         {loading ? (
           <div className="loading-container">
@@ -39,7 +39,7 @@ function BookDetails() {
           </div>
         ) : book ? (
           <div className="book-info-details">
-            <h3 className="book-title-details">{book.titol}</h3>
+            <h3 className="book-title-details h3">{book.titol}</h3>
             
             <div className="book-metadata">
               <div className="metadata-item">

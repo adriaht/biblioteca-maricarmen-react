@@ -62,7 +62,7 @@ function BookList() {
     <div className="container">
       <div className="header">
         <img src={imgReact} alt="React Logo" className="logo" />
-        <h1>Biblioteca Mari Carmen Brito</h1>
+        <h1 className='h1'>Biblioteca Mari Carmen Brito</h1>
       </div>
       
       {/* Buscador con capacidad de búsqueda */}
@@ -71,7 +71,7 @@ function BookList() {
       <div className="books-section">
         {searchActive && (
           <div className="search-status">
-            <h2>Resultats per: "{searchTerm}"</h2>
+            <h2 className='h2'>Resultats per: "{searchTerm}"</h2>
             <button onClick={clearSearch} className="clear-search-btn">
               Mostrar tots els llibres
             </button>
@@ -79,7 +79,7 @@ function BookList() {
         )}
         
         {!searchActive && (
-          <h2>Llistat de llibres</h2>
+          <h2 className='h2'>Llistat de llibres</h2>
         )}
         
         {loading ? (
