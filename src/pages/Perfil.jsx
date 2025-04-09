@@ -1,8 +1,9 @@
+// Perfil.js
 import { useState, useEffect } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import Paragraph from "../components/Paragraph";
-import LabelInput from "../components/LabelInput";
+import EditarPerfil from "./EditarPerfil"; // Asegúrate de que la ruta sea correcta
 
 function Perfil({ username, onBack }) {
   const [profileData, setProfileData] = useState(null);
@@ -13,9 +14,7 @@ function Perfil({ username, onBack }) {
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/perfil/", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username }),
     })
       .then((res) => {
@@ -23,43 +22,49 @@ function Perfil({ username, onBack }) {
         return res.json();
       })
       .then((data) => {
-        console.log(data.imatge);
         setProfileData(data);
-        setFormData(data);
+        setFormData(data); // Guardamos todos los datos, pero solo se editarán imagen, email y teléfono
       })
       .catch((err) => setError(err.message));
   }, [username]);
 
+  // Actualiza los campos editables (imagen, email, y teléfono)
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  
-
+  // Al guardar, se envían solo los campos editables junto con el identificador (username)
   const handleSave = async () => {
     setMessage("");
-    const res = await fetch("http://127.0.0.1:8000/api/verificar-cambios/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const dataToSend = {
+      username: profileData.username,
+      imatge: formData.imatge,
+      email: formData.email,
+      telefon: formData.telefon,
+    };
 
-    const data = await res.json();
-
-    if (data.modified) {
-      await fetch("http://127.0.0.1:8000/api/perfil/", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/verificar-cambios/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSend),
       });
 
-      setMessage("Perfil actualizado correctamente.");
-    } else {
-      setMessage("No hay cambios para guardar.");
+      const data = await res.json();
+
+      if (data.modified) {
+        await fetch("http://127.0.0.1:8000/api/perfil/", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dataToSend),
+        });
+      
+        setMessage("Perfil actualizado correctamente.");
+      } else {
+        setMessage("No hay cambios para guardar.");
+      }
+    } catch (err) {
+      setMessage("Error al actualizar el perfil.");
     }
   };
 
@@ -71,72 +76,30 @@ function Perfil({ username, onBack }) {
       </div>
     );
   }
-
   if (!profileData) return <Paragraph>Cargando perfil...</Paragraph>;
 
   return (
-    <div className="perfil" style={{ width: "700px" }}>
-      <Header level={2}>Editar perfil de {profileData.username}</Header>
+    <div style={{ width: "700px" }}>
+      <Header level={1}>Editar perfil de {profileData.username}</Header>
 
-      {profileData.imatge ? (
-        <img
-          src={`http://127.0.0.1:8000${profileData.imatge}`}
-          alt="Imagen de perfil"
-          width="100px"
-          height="100px"
-          style={{
-            borderRadius: "50%",
-            objectFit: "cover"
-          }}
-        />
-      ) : (
-        <p>No hay imagen de perfil</p>
-      )}
-
-      <LabelInput
-        label="Nombre:"
-        name="nombre"
-        type="text"
-        value={formData.nombre || ""}
+      {/* Componente para editar imagen, email y teléfono */}
+      <EditarPerfil
+        formData={formData}
         onChange={handleChange}
+        onSave={handleSave}
+        message={message}
       />
 
-      <LabelInput
-        label="Email:"
-        name="email"
-        type="email"
-        value={formData.email || ""}
-        onChange={handleChange}
+      <Button
+        text="Volver"
+        onClick={onBack}
+        style={{
+          position: "fixed",
+          top: 30,
+          left: 30,
+          width: "100px",
+        }}
       />
-
-      <LabelInput
-        label="Centro:"
-        name="centre"
-        type="text"
-        value={formData.centre || ""}
-        onChange={handleChange}
-      />
-
-      <LabelInput
-        label="Ciclo:"
-        name="cicle"
-        type="text"
-        value={formData.cicle || ""}
-        onChange={handleChange}
-      />
-
-      <LabelInput
-        label="Teléfono:"
-        name="telefon"
-        type="tel"
-        value={formData.telefon || ""}
-        onChange={handleChange}
-      />
-
-      {message && <Paragraph>{message}</Paragraph>}
-
-      <Button text="Guardar cambios" onClick={handleSave} />
-      <Button text="Volver" onClick={onBack} />
     </div>
   );
 }
