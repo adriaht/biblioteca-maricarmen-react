@@ -1,12 +1,16 @@
-import { useState } from "react";
-import './App.css';
-import BookList from './components/BookList';
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import './styles.css';
 import Login from "./pages/Login";
 import UsuarioView from "./pages/UsuarioView";
 import BibliotecarioView from "./pages/BibliotecarioView";
 import Perfil from "./pages/Perfil";
 import Sidebar from "./components/Sidebar";
+import './styles/tailwind.css'; // Importado de HEAD
+import BookList from './components/BookList';
+import BookDetails from './components/BookDetails';
+import Navbar from './components/Navbar';
+import CsvUpload from "./components/CsvUpload"; // Importado de HEAD
 
 function App() {
 
@@ -31,6 +35,23 @@ function App() {
   const handleBackToHome = () => {
     setPage("home");
   };
+
+  useEffect(() => {
+    // Aquí puedes implementar tu lógica de autenticación
+    // Por ejemplo, verificar si hay un token en localStorage
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      setAuthenticated(true);
+    }
+  }, []);
+  
+  // Función para manejar el inicio de sesión exitoso
+  const handleLoginSuccess = () => {
+    setAuthenticated(true);
+  };
+  
+
+
 
   if (!isAuthenticated) {
     return (<>
@@ -92,7 +113,34 @@ console.log("rol: "+role);
     content = <p>Rol desconocido</p>;
   }
 
-  return <div>{content}</div>;
+
+  return (
+    <Router>
+      <div className="App">
+        <Navbar />
+        <div className="app-content">
+          <Routes>
+            <Route path="/" element={<BookList />} />
+            <Route
+              path="/login"
+              element={
+                isAuthenticated ?
+                <Navigate to="/" /> :
+                <Login onLoginSuccess={handleLoginSuccess} />
+              }
+            />
+            <Route path="/book/:id" element={<BookDetails />} />
+            <Route path="/csv-upload" element={<CsvUpload />} /> {/* Nueva ruta para CsvUpload */}
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
+  );
+
+
+  // Verificar si el usuario está autenticado al cargar la aplicación
 }
+ 
 
 export default App;
