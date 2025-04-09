@@ -93,7 +93,7 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
 
   return (
     <div id="login_page">
-      <Header level={2}>Login</Header>
+      <Header level={1}>Login</Header>
       <LabelInput
         label="Username"
         type="text"
