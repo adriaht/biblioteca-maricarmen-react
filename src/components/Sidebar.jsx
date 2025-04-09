@@ -1,10 +1,10 @@
 import React from "react";
 import Button from "./Button";
 
-function Sidebar({ onPerfilClick,onCatalagClick, style, isToken, ...others }) {
+function Sidebar({ onLoginClick,onPerfilClick,setAuthenticated, onCatalagClick, style, isToken, setRole, ...others }) {
   return (
     <div
-    style={{
+      style={{
         position: "fixed",
         top: 0,
         right: 0,
@@ -22,16 +22,27 @@ function Sidebar({ onPerfilClick,onCatalagClick, style, isToken, ...others }) {
     >
 
       {isToken && onPerfilClick && (
-         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-         <Button text="☰ Perfil" onClick={onPerfilClick} />
-         <br />
-       </div>
-     
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button text="☰ Perfil" onClick={onPerfilClick} />
+          <br />
+        </div>
+
       )}
-       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-         <Button text="Catalogo" onClick={onCatalagClick} />
-       </div>
-     
+      {isToken ? (
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button text="Catalogo" onClick={onCatalagClick} />
+        </div>
+      ) : (<>
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button text="Iniciar Sesión" onClick={onLoginClick} />
+          
+      </div>
+     <div style={{ display: "flex", justifyContent: "flex-end" }}>
+     <Button text="Catalogo"
+       onClick={onCatalagClick} />
+       
+   </div>
+   </>)}
       {/* Aquí puedes añadir más opciones del sidebar si lo deseas */}
     </div>
   );

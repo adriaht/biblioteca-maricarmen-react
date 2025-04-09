@@ -67,7 +67,11 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
         setToken(receivedToken); // Guardar el token en el estado local
 
         // Definir el rol según los grupos del usuario
-        if (data.grupos.includes("Bibliotecario")) {
+        if (data.grupos.includes("Admin")) {
+          setRole("admin");
+          setErrorMessage("");
+        }
+        else if (data.grupos.includes("Bibliotecario")) {
           setRole("bibliotecario");
           setErrorMessage("");
         } else if (data.grupos.includes("usuari")) {

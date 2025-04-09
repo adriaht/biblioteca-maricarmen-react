@@ -22,35 +22,49 @@ function App() {
   };
 
   const handleNavigateToSeeLandingPage = () => {
-    setPage("landingPage");
+    setPage("bookList");
   };
 
+  const handleNavigateToLoginPage = () => {
+    setPage("login");
+  };
   const handleBackToHome = () => {
     setPage("home");
   };
 
   if (!isAuthenticated) {
     return (<>
-      <Sidebar  onCatalagClick={handleNavigateToSeeLandingPage} isToken={token}/>
-      <Login
-        setAuthenticated={setAuthenticated}
-        setToken={setToken} 
-        setUser={setUser}
-        setRole={setRole}
-        setGrupos={setGrupos}
-        onCatalagClick={handleNavigateToSeeLandingPage}
-      />
+      <Sidebar onLoginClick={handleNavigateToLoginPage} setRole={setRole} setAuthenticated ={setAuthenticated} onCatalagClick={handleNavigateToSeeLandingPage} isToken={token}/>
+      {page === "login" ? (
+          <Login
+            setAuthenticated={setAuthenticated}
+            setToken={setToken} 
+            setUser={setUser}
+            setRole={setRole}
+            setGrupos={setGrupos}
+            onCatalagClick={handleNavigateToSeeLandingPage}
+          />
+        ) : (
+          <BookList />
+        )}
       </>
     );
 
   }
 
   let content;
-
+console.log("rol: "+role);
   if (page === "editProfile") {
     content =  <Perfil username={user} onBack={handleBackToHome} />;
 
-  } else if (role === "bibliotecario") {
+  } else if (role === "admin") {
+    
+      window.location.href = "http://127.0.0.1:8000/admin/";
+      return null;
+
+   
+
+  }else if (role === "bibliotecario") {
     content = (<>
       <Sidebar  onCatalagClick={handleNavigateToSeeLandingPage} onPerfilClick={handleNavigateToEditProfile} isToken={token}/>
       <BibliotecarioView
@@ -68,7 +82,13 @@ function App() {
       />
       </>
     );
-  } else {
+  } else if (role === "guest"){
+    content = (<>
+     <Sidebar onCatalagClick={handleNavigateToSeeLandingPage} isToken={token} setRole={setRole} />
+     <BookList />
+      </>
+    );
+  }else {
     content = <p>Rol desconocido</p>;
   }
 
