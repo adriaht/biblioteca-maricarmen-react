@@ -11,6 +11,9 @@ import BookList from './components/BookList';
 import BookDetails from './components/BookDetails';
 import Navbar from './components/Navbar';
 import CsvUpload from "./components/CsvUpload"; // Importado de HEAD
+import Paragraph from "./components/Paragraph";
+
+
 
 function App() {
 
@@ -22,17 +25,21 @@ function App() {
   const [page, setPage] = useState("home");
 
   const handleNavigateToEditProfile = () => {
-    setPage("editProfile");
+    console.log("Navegando a Perfil");
+    setPage("Perfil");
   };
 
   const handleNavigateToSeeLandingPage = () => {
+    console.log("Navegando a booklidt");
     setPage("bookList");
   };
 
   const handleNavigateToLoginPage = () => {
+    console.log("Navegando a login");
     setPage("login");
   };
   const handleBackToHome = () => {
+    console.log("Navegando a home");
     setPage("home");
   };
 
@@ -55,7 +62,7 @@ function App() {
 
   if (!isAuthenticated) {
     return (<>
-      <Sidebar onLoginClick={handleNavigateToLoginPage} setRole={setRole} setAuthenticated ={setAuthenticated} onCatalagClick={handleNavigateToSeeLandingPage} isToken={token}/>
+      <Navbar onLoginClick={handleNavigateToLoginPage} setRole={setRole} setAuthenticated ={setAuthenticated} onCatalagClick={handleNavigateToSeeLandingPage} isToken={token}/>
       {page === "login" ? (
           <Login
             setAuthenticated={setAuthenticated}
@@ -64,9 +71,11 @@ function App() {
             setRole={setRole}
             setGrupos={setGrupos}
             onCatalagClick={handleNavigateToSeeLandingPage}
+            backToLogin={handleNavigateToSeeLandingPage}
           />
-        ) : (
+        ) : (<>
           <BookList />
+          </>
         )}
       </>
     );
@@ -75,10 +84,7 @@ function App() {
 
   let content;
 console.log("rol: "+role);
-  if (page === "editProfile") {
-    content =  <Perfil username={user} onBack={handleBackToHome} />;
-
-  } else if (role === "admin") {
+ if (role === "admin") {
     
       window.location.href = "http://127.0.0.1:8000/admin/";
       return null;
@@ -86,26 +92,48 @@ console.log("rol: "+role);
    
 
   }else if (role === "bibliotecario") {
-    content = (<>
-      <Sidebar  onCatalagClick={handleNavigateToSeeLandingPage} onPerfilClick={handleNavigateToEditProfile} isToken={token}/>
-      <BibliotecarioView
-        username={user}
-        grupos={grupos}
-      />
+    console.log("estamos en biblioteca");
+    return (
+      <>
+        <Navbar
+          onCatalagClick={handleNavigateToSeeLandingPage}
+          onPerfilClick={handleNavigateToEditProfile}
+          isToken={token}
+          setAuthenticated={setAuthenticated}
+        />
+        <Paragraph>estamos en bibliotecario</Paragraph>
+
+        {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
+        {page === "Perfil" ? (
+          <Perfil username={user} onBack={handleBackToHome} />
+        ) : page === "bookList" ? (
+          <BookList />
+        ) : null}
       </>
     );
   } else if (role === "usuari") {
-    content = (<>
-    <Sidebar  onCatalagClick={handleNavigateToSeeLandingPage} onPerfilClick={handleNavigateToEditProfile} isToken={token}/>
-      <UsuarioView
-        username={user}
-        grupos={grupos}
-      />
+    console.log("estamos en usuario");
+    return (
+      <>
+        <Navbar
+          onCatalagClick={handleNavigateToSeeLandingPage}
+          onPerfilClick={handleNavigateToEditProfile}
+          isToken={token}
+          setAuthenticated={setAuthenticated}
+        />
+        <Paragraph>estamos en usuario</Paragraph>
+
+        {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
+        {page === "Perfil" ? (
+          <Perfil username={user} onBack={handleBackToHome} />
+        ) : page === "bookList" ? (
+          <BookList />
+        ) : null}
       </>
     );
   } else if (role === "guest"){
     content = (<>
-     <Sidebar onCatalagClick={handleNavigateToSeeLandingPage} isToken={token} setRole={setRole} />
+     <Navbar onCatalagClick={handleNavigateToSeeLandingPage} isToken={token} setRole={setRole}  setAuthenticated ={setAuthenticated}/>
      <BookList />
       </>
     );
@@ -120,6 +148,7 @@ console.log("rol: "+role);
         <Navbar />
         <div className="app-content">
           <Routes>
+            
             <Route path="/" element={<BookList />} />
             <Route
               path="/login"

@@ -11,6 +11,8 @@ function Perfil({ username, onBack }) {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
+  console.log("entramos en perfil");
+
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/perfil/", {
       method: "POST",

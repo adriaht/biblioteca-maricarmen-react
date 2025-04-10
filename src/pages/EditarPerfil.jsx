@@ -100,7 +100,7 @@ function EditarPerfil({ formData, onChange, onSave, message }) {
       )}
 
       {/* Campo Teléfono */}
-      <LabelInput
+      <LabelInput styleInput={{ color:"white" }}
         label="Teléfono:"
         name="telefon"
         value={formData.telefon || ""}

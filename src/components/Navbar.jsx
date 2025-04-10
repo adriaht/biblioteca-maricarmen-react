@@ -1,23 +1,14 @@
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import Button from './Button';
 
-function Navbar() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+function Navbar({ onLoginClick, onPerfilClick, setAuthenticated, onCatalagClick, style, isToken, setRole, ...others }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    // Verificar si hay un token en localStorage
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
   const handleLogout = () => {
-    // Eliminar el token y actualizar el estado
+    // Eliminar el token, actualizar estado y cerrar el menú
     localStorage.removeItem('authToken');
-    setIsAuthenticated(false);
-    // Cerrar el menú en móviles después de hacer logout
+    setAuthenticated(false);
     setMenuOpen(false);
   };
 
@@ -28,7 +19,7 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <Link to="/" className="navbar-logo">
+        <Link to="/" className="navbar-logo" onClick={() => setMenuOpen(false)}>
           Biblioteca Mari Carmen Brito
         </Link>
 
@@ -42,13 +33,29 @@ function Navbar() {
 
         <ul className={menuOpen ? 'nav-menu active' : 'nav-menu'}>
           <li className="nav-item">
-            <Link to="/" className="nav-link" onClick={() => setMenuOpen(false)}>
-              Inici
-            </Link>
+            {/* Botón para ir al catálogo / inicio */}
+            <Button
+              text="Inici"
+              onClick={() => {
+                setMenuOpen(false);
+                onCatalagClick();
+              }}
+            />
           </li>
-          
-          {isAuthenticated ? (
+
+          {isToken ? (
             <>
+              <li className="nav-item">
+                {/* Botón para ir a Perfil */}
+                <Button
+                  text="Perfil"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onPerfilClick();
+                  }}
+                />
+              </li>
+            
               <li className="nav-item">
                 <button onClick={handleLogout} className="logout-btn">
                   Tancar Sessió
@@ -56,11 +63,18 @@ function Navbar() {
               </li>
             </>
           ) : (
-            <li className="nav-item">
-              <Link to="/login" className="nav-link login-link" onClick={() => setMenuOpen(false)}>
-                Iniciar Sessió
-              </Link>
-            </li>
+            <>
+              <li className="nav-item">
+                {/* Botón para Iniciar Sesión */}
+                <Button
+                  text="Iniciar Sessió"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onLoginClick();
+                  }}
+                />
+              </li>
+            </>
           )}
         </ul>
       </div>

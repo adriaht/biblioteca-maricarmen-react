@@ -6,7 +6,7 @@ import Header from "../components/Header";
 import Paragraph from "../components/Paragraph";
 import Sidebar from "../components/Sidebar";
 
-function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCatalag }) {
+function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCatalag, backToLogin }) {
   console.log("Login iniciado ...");
 
   const [username, setUsernameLocal] = useState("");
@@ -81,6 +81,9 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
           setRole("guest");
           setErrorMessage("");
         }
+
+
+        backToLogin();
       } else {
         throw new Error("Usuario no encontrado");
       }
