@@ -63,6 +63,8 @@ function App() {
   if (!isAuthenticated) {
     return (<>
       <Navbar onLoginClick={handleNavigateToLoginPage} setRole={setRole} setAuthenticated ={setAuthenticated} onCatalagClick={handleNavigateToSeeLandingPage} isToken={token}/>
+      <div className="main">
+     
       {page === "login" ? (
           <Login
             setAuthenticated={setAuthenticated}
@@ -77,6 +79,7 @@ function App() {
           <BookList />
           </>
         )}
+        </div>
       </>
     );
 
@@ -101,6 +104,7 @@ console.log("rol: "+role);
           isToken={token}
           setAuthenticated={setAuthenticated}
         />
+        <div className="main">
         <Paragraph>estamos en bibliotecario</Paragraph>
 
         {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
@@ -109,6 +113,7 @@ console.log("rol: "+role);
         ) : page === "bookList" ? (
           <BookList />
         ) : null}
+        </div>
       </>
     );
   } else if (role === "usuari") {
@@ -121,6 +126,7 @@ console.log("rol: "+role);
           isToken={token}
           setAuthenticated={setAuthenticated}
         />
+         <div className="main">
         <Paragraph>estamos en usuario</Paragraph>
 
         {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
@@ -129,6 +135,7 @@ console.log("rol: "+role);
         ) : page === "bookList" ? (
           <BookList />
         ) : null}
+        </div>
       </>
     );
   } else if (role === "guest"){
