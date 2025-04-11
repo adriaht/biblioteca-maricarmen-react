@@ -22,7 +22,7 @@ function App() {
   const [role, setRole] = useState("");
   const [user, setUser] = useState("");
   const [grupos, setGrupos] = useState([]);
-  const [page, setPage] = useState("home");
+  const [page, setPage] = useState("bookList");
 
   const handleNavigateToEditProfile = () => {
     console.log("Navegando a Perfil");
@@ -37,10 +37,6 @@ function App() {
   const handleNavigateToLoginPage = () => {
     console.log("Navegando a login");
     setPage("login");
-  };
-  const handleBackToHome = () => {
-    console.log("Navegando a home");
-    setPage("home");
   };
 
   useEffect(() => {
@@ -75,10 +71,10 @@ function App() {
             onCatalagClick={handleNavigateToSeeLandingPage}
             backToLogin={handleNavigateToSeeLandingPage}
           />
-        ) : (<>
+        ): page === "bookList" ?  (<>
           <BookList />
           </>
-        )}
+        ): null}
         </div>
       </>
     );
@@ -88,11 +84,9 @@ function App() {
   let content;
 console.log("rol: "+role);
  if (role === "admin") {
-    
+  
       window.location.href = "http://127.0.0.1:8000/admin/";
       return null;
-
-   
 
   }else if (role === "bibliotecario") {
     console.log("estamos en biblioteca");
@@ -109,8 +103,9 @@ console.log("rol: "+role);
 
         {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
         {page === "Perfil" ? (
-          <Perfil username={user} onBack={handleBackToHome} />
+          <Perfil username={user} onBack={handleNavigateToSeeLandingPage} />
         ) : page === "bookList" ? (
+          
           <BookList />
         ) : null}
         </div>
@@ -131,7 +126,7 @@ console.log("rol: "+role);
 
         {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
         {page === "Perfil" ? (
-          <Perfil username={user} onBack={handleBackToHome} />
+          <Perfil username={user} onBack={handleNavigateToSeeLandingPage} />
         ) : page === "bookList" ? (
           <BookList />
         ) : null}
