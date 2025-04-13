@@ -111,7 +111,6 @@ console.log("rol: "+role);
         />
         <div className="main">
           <Sidebar isToken={token} setRole={role} onPrestacClick={handleNavigateToPrestacPage} onCSVClick={handleNavigateToCSVPage} />
-        <Paragraph>estamos en bibliotecario</Paragraph>
 
         {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
         {page === "Perfil" ? (
@@ -139,7 +138,6 @@ console.log("rol: "+role);
           setAuthenticated={setAuthenticated}
         />
          <div className="main">
-        <Paragraph>estamos en usuario</Paragraph>
 
         {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
         {page === "Perfil" ? (

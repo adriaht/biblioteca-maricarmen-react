@@ -1,5 +1,8 @@
 .main{
+  display: flex;
   padding-top: 70px;
+  justify-content: center;
+  position: relative;
 }
 
 input{
@@ -17,7 +20,19 @@ body {
   padding: 0;
   color: #333;
 }
+/* sudebar */
 
+.sidebar { 
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  order: 1;
+}
+
+.sidebar button{
+ width: 100px;
+  color: white;
+}
 /* Navbar styles */
 .navbar {
   background-color: #214093;
@@ -151,7 +166,8 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1000px;
+  order: 2;
   margin: 0 auto;
   padding: 20px;
 }
