@@ -12,6 +12,8 @@ import BookDetails from './components/BookDetails';
 import Navbar from './components/Navbar';
 import CsvUpload from "./components/CsvUpload"; // Importado de HEAD
 import Paragraph from "./components/Paragraph";
+import Prestacs from "./pages/Prestacs";
+
 
 
 
@@ -53,6 +55,15 @@ function App() {
     setAuthenticated(true);
   };
   
+  const handleNavigateToCSVPage = () => {
+    console.log("Navegando a CSV");
+    setPage("CSV");
+  };
+
+  const handleNavigateToPrestacPage = () => {
+    console.log("Navegando a Prestac");
+    setPage("Prestac");
+  };
 
 
 
@@ -99,6 +110,7 @@ console.log("rol: "+role);
           setAuthenticated={setAuthenticated}
         />
         <div className="main">
+          <Sidebar isToken={token} setRole={role} onPrestacClick={handleNavigateToPrestacPage} onCSVClick={handleNavigateToCSVPage} />
         <Paragraph>estamos en bibliotecario</Paragraph>
 
         {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
@@ -107,7 +119,12 @@ console.log("rol: "+role);
         ) : page === "bookList" ? (
           
           <BookList />
-        ) : null}
+        ) : page === "CSV" ? (
+          <CsvUpload />
+        ) : page === "Prestac" ? (
+          <Prestacs />
+        ) : null} 
+       
         </div>
       </>
     );
