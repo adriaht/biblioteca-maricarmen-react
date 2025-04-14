@@ -5,8 +5,9 @@ function PrestacUsuario({ username }) {
   const [loans, setLoans] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  console.log("La pàgina de préstecs, username:", username);
+  const itemsPerPage = 5;
 
   const fetchLoans = async () => {
     setLoading(true);
@@ -14,25 +15,18 @@ function PrestacUsuario({ username }) {
     try {
       const response = await fetch("http://127.0.0.1:8000/api/prestecs", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username }),
       });
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
       const data = await response.json();
-
-      // Ordenem els préstecs per data de retorn descendent.
-      // Si data_retorn és nul, usem data_prestec com a fallback.
       const sortedLoans = data.sort((a, b) => {
         const dateA = a.data_retorn ? new Date(a.data_retorn) : new Date(a.data_prestec);
         const dateB = b.data_retorn ? new Date(b.data_retorn) : new Date(b.data_prestec);
-        // Ordenació descendent: el préstec amb la data més nova (més tard) apareix primer
         return dateB - dateA;
       });
-
       setLoans(sortedLoans);
     } catch (err) {
       setError(err.message || "Error en obtenir els préstecs");
@@ -41,60 +35,104 @@ function PrestacUsuario({ username }) {
     }
   };
 
-  useEffect(() => {
-    fetchLoans();
-  }, [username]);
+  useEffect(() => { fetchLoans(); }, [username]);
 
-  // Funció per determinar l'estil de la fila segons el rang
   const getRowStyle = (loan) => {
     const today = new Date();
     const startDate = new Date(loan.data_prestec);
-    // Si no hi ha data de retorn, també considerem fora de rang
-    if (!loan.data_retorn) {
-      return { color: "red" };
-    }
+    if (!loan.data_retorn) return { color: "red" };
     const endDate = new Date(loan.data_retorn);
-    const isWithinRange = today >= startDate && today <= endDate;
-    return { color: isWithinRange ? "green" : "red" };
+    return { color: today >= startDate && today <= endDate ? "green" : "red" };
+  };
+
+  // Paginació
+  const totalPages = Math.ceil(loans.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentLoans = loans.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
-    
-    <div className="container">
+    <div className="container" style={{ position: "relative", paddingBottom: "120px" }}>
       <Header level={1} estilo={{ marginBottom: "20px" }}>
         Préstecs de {username}
       </Header>
+
       {loading && <p>Carregant...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {!loading && !error && loans.length > 0 && (
-        <table border="2" cellPadding="20" cellSpacing="0">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Data de préstec</th>
-              <th>Data de retorn</th>
-              <th>Anotacions</th>
-              <th>Títol de l'exemplar</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loans.map((loan) => (
-              <tr key={loan.id} style={getRowStyle(loan)}>
-                <td>{loan.id}</td>
-                <td>{loan.data_prestec}</td>
-                <td>{loan.data_retorn || "No retornat"}</td>
-                <td>{loan.anotacions || "-"}</td>
-                <td>{loan.exemplar_titol}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <>
+          {/* Contenedor de la tabla */}
+          <div style={{ overflowX: "auto" }}>
+            <table border="2" cellPadding="20" cellSpacing="0" style={{ width: "100%" }}>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>ID</th>
+                  <th>Data de préstec</th>
+                  <th>Data de retorn</th>
+                  <th>Anotacions</th>
+                  <th>Títol de l'exemplar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentLoans.map((loan, index) => (
+                  <tr key={loan.id} style={getRowStyle(loan)}>
+                    <td>{indexOfFirstItem + index + 1}</td>
+                    <td>{loan.id}</td>
+                    <td>{loan.data_prestec}</td>
+                    <td>{loan.data_retorn || "No retornat"}</td>
+                    <td>{loan.anotacions || "-"}</td>
+                    <td>{loan.exemplar_titol}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
 
       {!loading && !error && loans.length === 0 && (
         <p>No s'han trobat préstecs per a aquest usuari.</p>
       )}
+
+      {/* Paginador fijo en la parte inferior */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: "20px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          gap: "5px",
+          padding: "10px",
+          background: "rgba(255, 255, 255, 0.95)",
+          boxShadow: "0px 0px 5px rgba(0,0,0,0.3)",
+          borderRadius: "4px",
+          zIndex: 1000,
+        }}
+      >
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i + 1}
+            onClick={() => handlePageChange(i + 1)}
+            style={{
+              padding: "8px 12px",
+              backgroundColor: currentPage === i + 1 ? "#007bff" : "#e0e0e0",
+              color: currentPage === i + 1 ? "#fff" : "#000",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
