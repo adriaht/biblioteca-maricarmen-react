@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { getBooks, searchBooks } from '../services/api';
 import BookItem from './BookItem';
 import SearchBox from './SearchBox';
 import imgReact from '../assets/esteve_terradas.jpeg';
@@ -12,19 +11,20 @@ function BookList() {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    // Cargar todos los libros al iniciar
     fetchBooks();
   }, []);
 
   const fetchBooks = async () => {
     setLoading(true);
     try {
-      const data = await getBooks();
+      const response = await fetch('http://127.0.0.1:8000/api/llibres');
+      if (!response.ok) throw new Error('No se pudo obtener la lista de libros');
+      const data = await response.json();
       setBooks(data);
-      setDisplayedBooks(data); // Inicialmente mostrar todos los libros
-      setLoading(false);
+      setDisplayedBooks(data);
     } catch (error) {
       console.error("Error fetching books:", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -32,21 +32,19 @@ function BookList() {
   const handleSearch = (term) => {
     setSearchTerm(term);
     setLoading(true);
-    
+
     if (!term || term.trim() === '') {
-      // Si el término de búsqueda está vacío, mostrar todos los libros
       setDisplayedBooks(books);
       setSearchActive(false);
       setLoading(false);
       return;
     }
 
-    // Filtrar los libros según el término de búsqueda
-    const filtered = books.filter(book => 
-      book.titol.toLowerCase().includes(term.toLowerCase()) || 
+    const filtered = books.filter(book =>
+      book.titol.toLowerCase().includes(term.toLowerCase()) ||
       (book.autor && book.autor.toLowerCase().includes(term.toLowerCase()))
     );
-    
+
     setDisplayedBooks(filtered);
     setSearchActive(true);
     setLoading(false);
@@ -64,10 +62,9 @@ function BookList() {
         <img src={imgReact} alt="React Logo" className="logo" />
         <h1 className='h1'>Biblioteca Mari Carmen Brito</h1>
       </div>
-      
-      {/* Buscador con capacidad de búsqueda */}
+
       {!loading && <SearchBox books={books} onSearch={handleSearch} />}
-      
+
       <div className="books-section">
         {searchActive && (
           <div className="search-status">
@@ -77,11 +74,9 @@ function BookList() {
             </button>
           </div>
         )}
-        
-        {!searchActive && (
-          <h2 className='h2'>Llistat de llibres</h2>
-        )}
-        
+
+        {!searchActive && <h2 className='h2'>Llistat de llibres</h2>}
+
         {loading ? (
           <div className="loading-container">
             <div className="loading-spinner"></div>

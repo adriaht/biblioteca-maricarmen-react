@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import './styles.css';
 import Login from "./pages/Login";
 import UsuarioView from "./pages/UsuarioView";
@@ -48,6 +49,11 @@ function App() {
   };
 
   const handleNavigateToPrestacPage = () => {
+    console.log("Navegando a Prestac");
+    setPage("Prestac");
+  };
+
+  const handleNavigateToDetailBook = () => {
     console.log("Navegando a Prestac");
     setPage("Prestac");
   };
@@ -151,26 +157,25 @@ function App() {
         </div>
       </>
     );
-  } else if (role === "guest") {
-    content = (<>
-      <Navbar onCatalagClick={handleNavigateToSeeLandingPage} isToken={token} setRole={setRole} setAuthenticated={setAuthenticated} />
-      <BookList />
-    </>
-    );
   } 
 
+ // Usamos useLocation para saber la ruta actual y controlar qué se muestra
+  // Importa useLocation desde 'react-router-dom'
+  const location = useLocation();
 
+  // Si la ruta es de detalles de libro, solo mostramos las rutas (que incluyen BookDetails)
+  if (location.pathname.startsWith("/book/")) {
+    return <AppRoutes />;
+  }
+
+  // En otro caso, mostramos nuestro contexto (contenido) habitual junto con las rutas
   return (
-    <div className="main">
-
-      {content}
-
-    </div>
+    <>
+      <div className="main">
+        {content}
+      </div>
+    </>
   );
-
-
-  // Verificar si el usuario está autenticado al cargar la aplicación
 }
-
 
 export default App;
