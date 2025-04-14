@@ -71,7 +71,6 @@ function App() {
 
  
   console.log("rol: " + role);
-  
   if (!isAuthenticated) {
     content = (<>
       <Navbar onLoginClick={handleNavigateToLoginPage} setRole={setRole} setAuthenticated={setAuthenticated} onCatalagClick={handleNavigateToSeeLandingPage} isToken={token} />
