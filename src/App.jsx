@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
 import { useState, useEffect } from "react";
 import './styles.css';
 import Login from "./pages/Login";
@@ -14,7 +14,7 @@ import CsvUpload from "./components/CsvUpload"; // Importado de HEAD
 import Paragraph from "./components/Paragraph";
 import Prestacs from "./pages/Prestacs";
 import PrestacUsuario from "./pages/PrestacUsuario"
-
+import AppRoutes from "./AppRoutes"
 
 
 function App() {
@@ -60,51 +60,49 @@ function App() {
       setAuthenticated(true);
     }
   }, []);
-  
+
   // Función para manejar el inicio de sesión exitoso
   const handleLoginSuccess = () => {
     setAuthenticated(true);
   };
+
+
+  let content;
+
+ 
+  console.log("rol: " + role);
   
-  
-
-
-
   if (!isAuthenticated) {
-    return (<>
-      <Navbar onLoginClick={handleNavigateToLoginPage} setRole={setRole} setAuthenticated ={setAuthenticated} onCatalagClick={handleNavigateToSeeLandingPage} isToken={token}/>
+    content = (<>
+      <Navbar onLoginClick={handleNavigateToLoginPage} setRole={setRole} setAuthenticated={setAuthenticated} onCatalagClick={handleNavigateToSeeLandingPage} isToken={token} />
       <div className="main">
-     
-      {page === "login" ? (
+
+        {page === "login" ? (
           <Login
             setAuthenticated={setAuthenticated}
-            setToken={setToken} 
+            setToken={setToken}
             setUser={setUser}
             setRole={setRole}
             setGrupos={setGrupos}
             onCatalagClick={handleNavigateToSeeLandingPage}
             backToLogin={handleNavigateToSeeLandingPage}
           />
-        ): page === "bookList" ?  (<>
+        ) : page === "bookList" ? (<>
           <BookList />
-          </>
-        ): null}
-        </div>
-      </>
+        </>
+        ) : null}
+      </div>
+    </>
     );
 
-  }
+  }else if (role === "admin") {
 
-  let content;
-console.log("rol: "+role);
- if (role === "admin") {
-  
-      window.location.href = "http://127.0.0.1:8000/admin/";
-      return null;
+    window.location.href = "http://127.0.0.1:8000/admin/";
+    return null;
 
-  }else if (role === "bibliotecario") {
+  } else if (role === "bibliotecario") {
     console.log("estamos en biblioteca");
-    return (
+    content = (
       <>
         <Navbar
           onCatalagClick={handleNavigateToSeeLandingPage}
@@ -115,24 +113,24 @@ console.log("rol: "+role);
         <div className="main">
           <Sidebar isToken={token} setRole={role} onPrestacClick={handleNavigateToPrestacPage} onCSVClick={handleNavigateToCSVPage} />
 
-        {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
-        {page === "Perfil" ? (
-          <Perfil username={user} onBack={handleNavigateToSeeLandingPage} />
-        ) : page === "bookList" ? (
-          
-          <BookList />
-        ) : page === "CSV" ? (
-          <CsvUpload />
-        ) : page === "Prestac" ? (
-          <Prestacs username={user}/>
-        ) : null} 
-       
+          {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
+          {page === "Perfil" ? (
+            <Perfil username={user} onBack={handleNavigateToSeeLandingPage} />
+          ) : page === "bookList" ? (
+
+            <BookList />
+          ) : page === "CSV" ? (
+            <CsvUpload />
+          ) : page === "Prestac" ? (
+            <Prestacs username={user} />
+          ) : null}
+
         </div>
       </>
     );
   } else if (role === "usuari") {
     console.log("estamos en usuario");
-    return (
+    content = (
       <>
         <Navbar
           onCatalagClick={handleNavigateToSeeLandingPage}
@@ -140,59 +138,40 @@ console.log("rol: "+role);
           isToken={token}
           setAuthenticated={setAuthenticated}
         />
-         <div className="main">
-         <Sidebar isToken={token} setRole={role} onPrestacClick={handleNavigateToPrestacPage} onCSVClick={handleNavigateToCSVPage} />       
+        <div className="main">
+          <Sidebar isToken={token} setRole={role} onPrestacClick={handleNavigateToPrestacPage} onCSVClick={handleNavigateToCSVPage} />
 
-        {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
-        {page === "Perfil" ? (
-          <Perfil username={user} onBack={handleNavigateToSeeLandingPage} />
-        ) : page === "bookList" ? (
-          <BookList />
-        ) : page === "Prestac" ? (
-          <PrestacUsuario username={user}/>
-        ) : null} 
+          {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
+          {page === "Perfil" ? (
+            <Perfil username={user} onBack={handleNavigateToSeeLandingPage} />
+          ) : page === "bookList" ? (
+            <BookList />
+          ) : page === "Prestac" ? (
+            <PrestacUsuario username={user} />
+          ) : null}
         </div>
       </>
     );
-  } else if (role === "guest"){
+  } else if (role === "guest") {
     content = (<>
-     <Navbar onCatalagClick={handleNavigateToSeeLandingPage} isToken={token} setRole={setRole}  setAuthenticated ={setAuthenticated}/>
-     <BookList />
-      </>
+      <Navbar onCatalagClick={handleNavigateToSeeLandingPage} isToken={token} setRole={setRole} setAuthenticated={setAuthenticated} />
+      <BookList />
+    </>
     );
-  }else {
-    content = <p>Rol desconocido</p>;
-  }
+  } 
 
 
   return (
-    <Router>
-      <div className="App">
-        <Navbar />
-        <div className="app-content">
-          <Routes>
-            
-            <Route path="/" element={<BookList />} />
-            <Route
-              path="/login"
-              element={
-                isAuthenticated ?
-                <Navigate to="/" /> :
-                <Login onLoginSuccess={handleLoginSuccess} />
-              }
-            />
-            <Route path="/book/:id" element={<BookDetails />} />
-            <Route path="/csv-upload" element={<CsvUpload />} /> {/* Nueva ruta para CsvUpload */}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </div>
-      </div>
-    </Router>
+    <div className="main">
+
+      {content}
+
+    </div>
   );
 
 
   // Verificar si el usuario está autenticado al cargar la aplicación
 }
- 
+
 
 export default App;
