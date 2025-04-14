@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 function BookItem({ book }) {
   return (
-    <Link to={`/book/${book.id}`} className="book-link">
+
       <div className="book-card">
         <h3 className="book-title h3">
           {book.titol}
@@ -30,7 +30,7 @@ function BookItem({ book }) {
           Veure detalls
         </button>
       </div>
-    </Link>
+
   );
 }
 

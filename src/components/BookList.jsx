@@ -1,9 +1,10 @@
+// BookList.jsx
 import { useEffect, useState } from 'react';
 import BookItem from './BookItem';
 import SearchBox from './SearchBox';
 import imgReact from '../assets/esteve_terradas.jpeg';
 
-function BookList() {
+function BookList({ onSelectBook }) {
   const [books, setBooks] = useState([]);
   const [displayedBooks, setDisplayedBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,19 +33,16 @@ function BookList() {
   const handleSearch = (term) => {
     setSearchTerm(term);
     setLoading(true);
-
     if (!term || term.trim() === '') {
       setDisplayedBooks(books);
       setSearchActive(false);
       setLoading(false);
       return;
     }
-
     const filtered = books.filter(book =>
       book.titol.toLowerCase().includes(term.toLowerCase()) ||
       (book.autor && book.autor.toLowerCase().includes(term.toLowerCase()))
     );
-
     setDisplayedBooks(filtered);
     setSearchActive(true);
     setLoading(false);
@@ -74,7 +72,6 @@ function BookList() {
             </button>
           </div>
         )}
-
         {!searchActive && <h2 className='h2'>Llistat de llibres</h2>}
 
         {loading ? (
@@ -85,7 +82,12 @@ function BookList() {
         ) : displayedBooks.length > 0 ? (
           <ul className="books-grid">
             {displayedBooks.map((book) => (
-              <li key={book.id} className="book-item">
+              <li
+                key={book.id}
+                className="book-item"
+                onClick={() => onSelectBook(book.id)}
+                style={{ cursor: "pointer" }}
+              >
                 <BookItem book={book} />
               </li>
             ))}
