@@ -1,8 +1,12 @@
-function Prestacs({ username, grupos }) {
+import Header from "../components/Header"
+import Paragraph from "../components/Paragraph"
+
+
+function Prestacs({ username}) {
     return (
         <div>
             <Header level={2}>Hola, {username} (Bibliotecario)</Header>
-            <Paragraph>Grupos: {grupos.join(", ")}</Paragraph>
+            
         </div>
     );
 }
