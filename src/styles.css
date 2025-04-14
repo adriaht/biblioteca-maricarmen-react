@@ -4,6 +4,20 @@ body {
   text-align: center;
 }
 
+/*para booklist*/
+.book-author span,
+.book-editorial span,
+.book-isbn span {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.book-author,
+.book-editorial,
+.book-isbn {
+  color: #000; 
+}
+
 .container {
   max-width: 800px;
   margin: 20px auto;
@@ -40,4 +54,13 @@ ul li {
   padding: 5px;
   margin: 5px 0;
   border-radius: 3px;
+}
+
+/*gif*/
+.gif-banner {
+  width: 100%;
+  max-height: 300px; 
+  object-fit: cover;
+  margin-top: 30px; 
+  margin-bottom: 20px; 
 }
