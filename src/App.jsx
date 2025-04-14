@@ -13,7 +13,7 @@ import Navbar from './components/Navbar';
 import CsvUpload from "./components/CsvUpload"; // Importado de HEAD
 import Paragraph from "./components/Paragraph";
 import Prestacs from "./pages/Prestacs";
-
+import PrestacUsuario from "./pages/PrestacUsuario"
 
 
 
@@ -41,6 +41,17 @@ function App() {
     setPage("login");
   };
 
+
+  const handleNavigateToCSVPage = () => {
+    console.log("Navegando a CSV");
+    setPage("CSV");
+  };
+
+  const handleNavigateToPrestacPage = () => {
+    console.log("Navegando a Prestac");
+    setPage("Prestac");
+  };
+
   useEffect(() => {
     // Aquí puedes implementar tu lógica de autenticación
     // Por ejemplo, verificar si hay un token en localStorage
@@ -55,15 +66,7 @@ function App() {
     setAuthenticated(true);
   };
   
-  const handleNavigateToCSVPage = () => {
-    console.log("Navegando a CSV");
-    setPage("CSV");
-  };
-
-  const handleNavigateToPrestacPage = () => {
-    console.log("Navegando a Prestac");
-    setPage("Prestac");
-  };
+  
 
 
 
@@ -121,7 +124,7 @@ console.log("rol: "+role);
         ) : page === "CSV" ? (
           <CsvUpload />
         ) : page === "Prestac" ? (
-          <Prestacs />
+          <Prestacs username={user}/>
         ) : null} 
        
         </div>
@@ -138,13 +141,16 @@ console.log("rol: "+role);
           setAuthenticated={setAuthenticated}
         />
          <div className="main">
+         <Sidebar isToken={token} setRole={role} onPrestacClick={handleNavigateToPrestacPage} onCSVClick={handleNavigateToCSVPage} />       
 
         {/* Verifica el valor de 'page' y muestra el contenido correspondiente */}
         {page === "Perfil" ? (
           <Perfil username={user} onBack={handleNavigateToSeeLandingPage} />
         ) : page === "bookList" ? (
           <BookList />
-        ) : null}
+        ) : page === "Prestac" ? (
+          <PrestacUsuario username={user}/>
+        ) : null} 
         </div>
       </>
     );

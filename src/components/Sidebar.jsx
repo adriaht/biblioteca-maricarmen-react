@@ -9,7 +9,7 @@ function Sidebar({ onCSVClick, onPrestacClick, setAuthenticated, style, isToken,
           position: "fixed",
           top: 70, // para no tapar la navbar
           left: 0,
-          width: "150px",
+          width: "130px",
           height: "100%", // altura completa del viewport
           backgroundColor: "rgba(63, 94, 153, 0.9)", // corregido: faltaba un número
           boxShadow: "0 0 10px rgba(0,0,0,0.1)",
@@ -17,6 +17,7 @@ function Sidebar({ onCSVClick, onPrestacClick, setAuthenticated, style, isToken,
           flexDirection: "column",
           alignItems: "center",
           zIndex: 999,
+          marginRight: "10px",
         }}
         {...others}
       >

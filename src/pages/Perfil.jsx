@@ -81,7 +81,7 @@ function Perfil({ username, onBack }) {
   if (!profileData) return <Paragraph>Cargando perfil...</Paragraph>;
 
   return (
-    <div style={{ width: "700px" }}>
+    <div className="container">
       <Header level={1}>Editar perfil de {profileData.username}</Header>
 
       {/* Componente para editar imagen, email y teléfono */}
