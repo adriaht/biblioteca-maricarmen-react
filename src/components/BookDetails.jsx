@@ -1,3 +1,4 @@
+// BookDetails.jsx
 import { useEffect, useState } from 'react';
 
 function BookDetails({ bookId, onBack, extraProp }) {
@@ -11,17 +12,39 @@ function BookDetails({ bookId, onBack, extraProp }) {
     const fetchBookDetails = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/llibres/${bookId}`, {
+        // 1. Obtenim els detalls del llibre
+        const resBook = await fetch(`http://127.0.0.1:8000/api/llibres/${bookId}`, {
           signal: controller.signal
         });
-        if (!response.ok) {
+        if (!resBook.ok) {
           throw new Error('No se pudo obtener el libro');
         }
-        const data = await response.json();
-        setBook(data);
-      } catch (error) {
-        if (error.name !== 'AbortError') {
-          console.error("Error fetching book details:", error);
+        const bookData = await resBook.json();
+        console.log("Detalls del llibre:", JSON.stringify(bookData, null, 2));
+
+        // 2. Obtenim tots els exemplars
+        const resExemplars = await fetch('http://127.0.0.1:8000/api/exemplars', {
+          signal: controller.signal
+        });
+        if (!resExemplars.ok) {
+          throw new Error('No se pudo obtener la lista de exemplars');
+        }
+        const exemplarsData = await resExemplars.json();
+        console.log("Llista d'exemplars:", JSON.stringify(exemplarsData, null, 2));
+
+        // 3. Filtrar els exemplars relacionats amb aquest llibre:
+        // Assumim que cada exemplar té una propietat "cataleg" amb un camp "id"
+        const bookExemplars = exemplarsData.filter(exemplar => 
+          exemplar.cataleg?.id === bookData.id
+        );
+        console.log("Exemplars filtrats per aquest llibre:", JSON.stringify(bookExemplars, null, 2));
+
+        // Afegim la propietat "exemplars" al llibre
+        bookData.exemplars = bookExemplars;
+        setBook(bookData);
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error("Error fetching book details:", err);
           setError("No s'han pogut carregar els detalls del llibre.");
         }
       } finally {
@@ -34,10 +57,43 @@ function BookDetails({ bookId, onBack, extraProp }) {
     return () => controller.abort();
   }, [bookId]);
 
+  // Càlcul totals globals (sense comptar els de baixa)
+  let totalExemplars = 0, totalExclosos = 0, totalNoExclosos = 0;
+  if (book && Array.isArray(book.exemplars)) {
+    book.exemplars.forEach(e => {
+      if (!e.baixa) {
+        totalExemplars++;
+        if (e.exclos_prestec) {
+          totalExclosos++;
+        } else {
+          totalNoExclosos++;
+        }
+      }
+    });
+  }
+
+  // Agrupació per centre
+  let centreStats = {};
+  if (book && Array.isArray(book.exemplars)) {
+    book.exemplars.forEach(e => {
+      // No comptem si està de baixa
+      if (!e.baixa && e.centre && e.centre.nom) {
+        const nomCentre = e.centre.nom;
+        if (!centreStats[nomCentre]) {
+          centreStats[nomCentre] = { exclosos: 0, noExclosos: 0 };
+        }
+        if (e.exclos_prestec) {
+          centreStats[nomCentre].exclosos++;
+        } else {
+          centreStats[nomCentre].noExclosos++;
+        }
+      }
+    });
+  }
+
   return (
     <div className="book-details-container">
       <button onClick={onBack} className="back-btn">← Tornar a la llista</button>
-
       <div className="book-details-card">
         <h2 className="details-title h2">Detalls del llibre</h2>
         {loading ? (
@@ -55,9 +111,13 @@ function BookDetails({ bookId, onBack, extraProp }) {
               <div className="metadata-item"><span>Autor:</span> {book.autor || "No especificat"}</div>
               {book.editorial && <div className="metadata-item"><span>Editorial:</span> {book.editorial}</div>}
               {book.ISBN && <div className="metadata-item"><span>ISBN:</span> {book.ISBN}</div>}
-              {book.titol_original && <div className="metadata-item"><span>Titol original:</span> {book.titol_original}</div>}
+              {book.titol_original && <div className="metadata-item"><span>Títol original:</span> {book.titol_original}</div>}
               {book.colleccio && <div className="metadata-item"><span>Colecció:</span> {book.colleccio}</div>}
-              {book.data_edicio && <div className="metadata-item"><span>Fecha de edición:</span> {new Date(book.data_edicio).toLocaleDateString()}</div>}
+              {book.data_edicio && (
+                <div className="metadata-item">
+                  <span>Fecha de edición:</span> {new Date(book.data_edicio).toLocaleDateString()}
+                </div>
+              )}
               {book.pagines && <div className="metadata-item"><span>Páginas:</span> {book.pagines}</div>}
               {book.llengua?.nom && <div className="metadata-item"><span>Idioma:</span> {book.llengua.nom}</div>}
               {book.pais?.nom && <div className="metadata-item"><span>País:</span> {book.pais.nom}</div>}
@@ -86,7 +146,27 @@ function BookDetails({ bookId, onBack, extraProp }) {
                 </a>
               </div>
             )}
-            {extraProp && <p className="extra-info">Prop extra: {extraProp}</p>}
+            
+            {/* Secció extra: Mostrem els totals i detalls per centre */}
+            <div className="extra-info">
+              {/* <h4>Detalls dels exemplars</h4> */}
+              {/* <p>Total exemplars (sense baixa): {totalExemplars}</p>
+              <p>Exclosos: {totalExclosos} | No exclosos: {totalNoExclosos}</p> */}
+              
+              <h5>Exemplars disponiblen en cada centre:</h5>
+              {Object.keys(centreStats).length > 0 ? (
+                <ul>
+                  {Object.entries(centreStats).map(([centre, stats]) => (
+                    <li key={centre}>
+                      {centre}: Exclosos: {stats.exclosos} | No exclosos: {stats.noExclosos}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No hi ha exemplars disponibles per cap centre.</p>
+              )}
+              {extraProp && <p className="extra-prop">Prop extra: {extraProp}</p>}
+            </div>
           </div>
         ) : (
           <p className="error-message">No s'ha trobat informació per a aquest llibre.</p>
