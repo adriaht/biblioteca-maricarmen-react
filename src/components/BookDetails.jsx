@@ -1,28 +1,37 @@
-// BookDetails.jsx
 import { useEffect, useState } from 'react';
 
 function BookDetails({ bookId, onBack, extraProp }) {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchBookDetails = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/llibres/${bookId}`);
+        const response = await fetch(`http://127.0.0.1:8000/api/llibres/${bookId}`, {
+          signal: controller.signal
+        });
         if (!response.ok) {
           throw new Error('No se pudo obtener el libro');
         }
         const data = await response.json();
         setBook(data);
       } catch (error) {
-        console.error("Error fetching book details:", error);
+        if (error.name !== 'AbortError') {
+          console.error("Error fetching book details:", error);
+          setError("No s'han pogut carregar els detalls del llibre.");
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchBookDetails();
+
+    return () => controller.abort();
   }, [bookId]);
 
   return (
@@ -36,12 +45,14 @@ function BookDetails({ bookId, onBack, extraProp }) {
             <div className="loading-spinner"></div>
             <p>Cargant detalls...</p>
           </div>
+        ) : error ? (
+          <p className="error-message">{error}</p>
         ) : book ? (
           <div className="book-info-details">
             <h3 className="book-title-details h3">{book.titol}</h3>
             <div className="book-metadata">
               <div className="metadata-item"><span>ID:</span> {book.id}</div>
-              <div className="metadata-item"><span>Autor:</span> {book.autor || "No especificado"}</div>
+              <div className="metadata-item"><span>Autor:</span> {book.autor || "No especificat"}</div>
               {book.editorial && <div className="metadata-item"><span>Editorial:</span> {book.editorial}</div>}
               {book.ISBN && <div className="metadata-item"><span>ISBN:</span> {book.ISBN}</div>}
               {book.titol_original && <div className="metadata-item"><span>Titol original:</span> {book.titol_original}</div>}
@@ -59,7 +70,7 @@ function BookDetails({ bookId, onBack, extraProp }) {
             )}
             {book.anotacions && (
               <div className="book-notes">
-                <h4>Anotaciones:</h4>
+                <h4>Anotacions:</h4>
                 <p>{book.anotacions}</p>
               </div>
             )}

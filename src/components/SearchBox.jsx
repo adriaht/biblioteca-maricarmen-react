@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
-function SearchBox({ books, onSearch }) {
+function SearchBox({ books, onSearch, onSelectBook }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -26,9 +25,8 @@ function SearchBox({ books, onSearch }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (searchTerm.length >= 3) {
-      // Llamar a la función onSearch con el término de búsqueda
       onSearch(searchTerm);
-      setShowResults(false); // Ocultar los resultados desplegables
+      setShowResults(false);
     }
   };
 
@@ -36,7 +34,8 @@ function SearchBox({ books, onSearch }) {
     setSearchTerm(e.target.value);
   };
 
-  const handleItemClick = () => {
+  const handleItemClick = (bookId) => {
+    onSelectBook(bookId);
     setShowResults(false);
   };
 
@@ -59,15 +58,15 @@ function SearchBox({ books, onSearch }) {
         <div className="search-results">
           {searchResults.length > 0 ? (
             searchResults.map(book => (
-              <Link 
-                to={`/book/${book.id}`} 
+              <div 
                 key={book.id}
                 className="search-result-item"
-                onClick={handleItemClick}
+                onClick={() => handleItemClick(book.id)}
+                style={{ cursor: 'pointer' }}
               >
                 <div className="search-result-title">{book.titol}</div>
                 <div className="search-result-author">{book.autor || "Autor desconegut"}</div>
-              </Link>
+              </div>
             ))
           ) : (
             <div className="no-results">No s'han trobat resultats</div>

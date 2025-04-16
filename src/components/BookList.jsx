@@ -1,4 +1,3 @@
-// BookList.jsx
 import { useEffect, useState } from 'react';
 import BookItem from './BookItem';
 import SearchBox from './SearchBox';
@@ -32,11 +31,9 @@ function BookList({ onSelectBook }) {
 
   const handleSearch = (term) => {
     setSearchTerm(term);
-    setLoading(true);
     if (!term || term.trim() === '') {
       setDisplayedBooks(books);
       setSearchActive(false);
-      setLoading(false);
       return;
     }
     const filtered = books.filter(book =>
@@ -45,7 +42,6 @@ function BookList({ onSelectBook }) {
     );
     setDisplayedBooks(filtered);
     setSearchActive(true);
-    setLoading(false);
   };
 
   const clearSearch = () => {
@@ -61,7 +57,13 @@ function BookList({ onSelectBook }) {
         <h1 className='h1'>Biblioteca Mari Carmen Brito</h1>
       </div>
 
-      {!loading && <SearchBox books={books} onSearch={handleSearch} />}
+      {!loading && (
+        <SearchBox 
+          books={books}
+          onSearch={handleSearch}
+          onSelectBook={onSelectBook}
+        />
+      )}
 
       <div className="books-section">
         {searchActive && (
@@ -86,9 +88,9 @@ function BookList({ onSelectBook }) {
                 key={book.id}
                 className="book-item"
                 onClick={() => onSelectBook(book.id)}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: 'pointer' }}
               >
-                <BookItem book={book} />
+                <BookItem book={book} onSelect={onSelectBook} />
               </li>
             ))}
           </ul>
