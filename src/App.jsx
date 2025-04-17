@@ -14,7 +14,7 @@ import PrestacUsuario from "./pages/PrestacUsuario";
 
 function App() {
   // Estados generales
-  const [isAuthenticated, setAuthenticated] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState("");
   const [role, setRole] = useState("");
   const [user, setUser] = useState("");
@@ -51,10 +51,10 @@ function App() {
     }
   }, []);
 
-  const handleLoginSuccess = () => setAuthenticated(true);
+  let content = null;
 
   // Si no está autenticado, mostramos la vista de Login o BookList (público)
-  if (!isAuthenticated) {
+  if (!authenticated) {
     return (
       <>
         <Navbar
@@ -63,6 +63,7 @@ function App() {
           setAuthenticated={setAuthenticated}
           onCatalagClick={handleNavigateToSeeLandingPage}
           isToken={token}
+          changeToken={setToken}
         />
         <div className="main">
           {page === "login" ? (
@@ -83,11 +84,7 @@ function App() {
         </div>
       </>
     );
-  }
-
-  // Para usuarios autenticados (basado en el rol)
-  let content = null;
-  if (role === "admin") {
+  }else if (role === "admin") {
     window.location.href = "http://127.0.0.1:8000/admin/";
     return null;
   } else if (role === "bibliotecario") {
@@ -99,6 +96,7 @@ function App() {
           onPerfilClick={handleNavigateToEditProfile}
           isToken={token}
           setAuthenticated={setAuthenticated}
+          changeToken={setToken}
         />
         <div className="main">
           <Sidebar
@@ -131,6 +129,7 @@ function App() {
           onPerfilClick={handleNavigateToEditProfile}
           isToken={token}
           setAuthenticated={setAuthenticated}
+          changeToken={setToken}
         />
         <div className="main">
           <Sidebar
@@ -151,22 +150,7 @@ function App() {
         </div>
       </>
     );
-  } else if (role === "guest") {
-    content = (
-      <>
-        <Navbar
-          onCatalagClick={handleNavigateToSeeLandingPage}
-          isToken={token}
-          setRole={setRole}
-          setAuthenticated={setAuthenticated}
-        />
-        <BookList onSelectBook={handleSelectBook} />
-      </>
-    );
-  } else {
-    content = <p>Rol desconocido</p>;
   }
-
   return <div className="main">{content}</div>;
 }
 

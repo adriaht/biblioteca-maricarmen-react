@@ -67,7 +67,7 @@ function BookList({ onSelectBook }) {
     <div className="container">
       <div className="header">
         <img src={imgReact} alt="React Logo" className="logo" />
-        <h1 className='h1'>Biblioteca Mari Carmen Brito</h1>
+        <h1 className='h1'>Biblioteca Maricarmen Brito</h1>
       </div>
 
       {!loading && (

@@ -56,7 +56,11 @@ function PrestacUsuario({ username }) {
   };
 
   return (
-    <div className="container" style={{ position: "relative", paddingBottom: "120px" }}>
+    <div className="container" style={{ 
+      position: "relative", 
+      paddingBottom: "120px",  
+           
+      }}>
       <Header level={1} estilo={{ marginBottom: "20px" }}>
         Préstecs de {username}
       </Header>
@@ -68,7 +72,7 @@ function PrestacUsuario({ username }) {
         <>
           {/* Contenedor de la tabla */}
           <div style={{ overflowX: "auto" }}>
-            <table border="2" cellPadding="20" cellSpacing="0" style={{ width: "100%" }}>
+            <table className="table" cellPadding="20" cellSpacing="0">
               <thead>
                 <tr>
                   <th>#</th>

@@ -95,7 +95,7 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
   };
 
   return (
-    <div id="login_page">
+    <div className="container"style={{marginTop:"80px",width:"700px"}}>
       <Header level={1}>Login</Header>
       <LabelInput
         label="Username"

@@ -155,13 +155,20 @@ function BookDetails({ bookId, onBack, extraProp }) {
               
               <h5>Exemplars disponiblen en cada centre:</h5>
               {Object.keys(centreStats).length > 0 ? (
-                <ul>
-                  {Object.entries(centreStats).map(([centre, stats]) => (
-                    <li key={centre}>
-                      {centre}: Exclosos: {stats.exclosos} | No exclosos: {stats.noExclosos}
-                    </li>
-                  ))}
-                </ul>
+               <ul>
+               {Object.entries(centreStats).map(([centre, stats]) => (
+                 <li key={centre}>
+                   {centre}:{' '}
+                   <span style={{ color: 'red' }}>
+                     Exclosos: {stats.exclosos}
+                   </span>{' '}
+                   |{' '}
+                   <span style={{ color: 'green' }}>
+                     No exclosos: {stats.noExclosos}
+                   </span>
+                 </li>
+               ))}
+             </ul>
               ) : (
                 <p>No hi ha exemplars disponibles per cap centre.</p>
               )}
