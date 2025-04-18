@@ -5,7 +5,7 @@
 :root {
   --bg-color: #f5f5f5;
   --text-color: #333;
-  --input-text: #fff;
+  --input-text: #333  ;
   --navbar-bg: #214093;
   --navbar-text: #fff;
   --navbar-hover: #DDE1F1;
@@ -24,8 +24,8 @@
   :root:not(.theme-light):not(.theme-dark) {
     --bg-color: #1b1a1a;
     --text-color: #e0e0e0;
-    --input-text: #e0e0e0;
-    --navbar-bg: #2e52b5;
+    --input-text: #395dc0;
+    --navbar-bg: #395dc0;
     --navbar-text: #e0e0e0;
     --navbar-hover: #4352a9;
     --secondary-color: #3949ab;
@@ -44,7 +44,7 @@
 .theme-light {
   --bg-color: #f5f5f5;
   --text-color: #333;
-  --input-text: #fff;
+  --input-text: #333;
   --navbar-bg: #214093;
   --navbar-text: #fff;
   --navbar-hover: #000000;
@@ -60,9 +60,9 @@
 .theme-dark {
   --bg-color: #1b1a1a;
     --text-color: #e0e0e0;
-    --input-text: #e0e0e0;
+    --input-text: #395dc0;
     --navbar-text: #e0e0e0;
-    --navbar-bg: #2e52b5;
+    --navbar-bg: #395dc0;
     --navbar-hover: #4352a9;
     --secondary-color: #3949ab;
     --card-bg: #1e1e1e;
@@ -327,7 +327,7 @@ h3 {
   outline: none;
   transition: all 0.3s;
   box-shadow: 0 2px 5px var(--card-shadow);
-  color: var(--input-text);
+  color: var(--input-text) !important; 
   background: none;
 }
 
