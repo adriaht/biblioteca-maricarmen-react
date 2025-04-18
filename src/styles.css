@@ -327,7 +327,7 @@ h3 {
   outline: none;
   transition: all 0.3s;
   box-shadow: 0 2px 5px var(--card-shadow);
-  color: var(--input-text) !important; 
+  color: var(--input-text) ; 
   background: none;
 }
 
