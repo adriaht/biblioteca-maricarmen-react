@@ -17,7 +17,7 @@ function BookList({ onSelectBook }) {
   const fetchBooks = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/llibres');
+      const response = await fetch('https://biblioteca5.ieti.site/api/llibres');
       if (!response.ok) throw new Error('No se pudo obtener la lista de libros');
       const data = await response.json();
       setBooks(data);

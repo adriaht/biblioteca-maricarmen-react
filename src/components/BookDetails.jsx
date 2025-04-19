@@ -11,7 +11,7 @@ function BookDetails({ bookId, onBack, extraProp }) {
     const fetchBookDetails = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/llibres/${bookId}`, {
+        const response = await fetch(`https://biblioteca5.ieti.site/api/llibres/${bookId}`, {
           signal: controller.signal
         });
         if (!response.ok) {

@@ -23,7 +23,7 @@ const CsvUpload = () => {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/subir-documento/",
+        "https://biblioteca5.ieti.site/api/subir-documento/",
         {
           method: "POST",
           body: formData,

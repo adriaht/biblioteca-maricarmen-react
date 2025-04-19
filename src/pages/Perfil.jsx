@@ -14,7 +14,7 @@ function Perfil({ username, onBack }) {
   console.log("entramos en perfil");
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/perfil/", {
+    fetch("https://biblioteca5.ieti.site/perfil/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username }),
@@ -46,7 +46,7 @@ function Perfil({ username, onBack }) {
     };
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/verificar-cambios/", {
+      const res = await fetch("https://biblioteca5.ieti.site/api/verificar-cambios/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dataToSend),
@@ -55,7 +55,7 @@ function Perfil({ username, onBack }) {
       const data = await res.json();
 
       if (data.modified) {
-        await fetch("http://127.0.0.1:8000/api/perfil/", {
+        await fetch("https://biblioteca5.ieti.site/api/perfil/", {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dataToSend),

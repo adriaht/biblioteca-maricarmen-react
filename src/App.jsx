@@ -82,7 +82,7 @@ function App() {
 
   let content = null;
   if (role === "admin") {
-    window.location.href = "http://127.0.0.1:8000/admin/";
+    window.location.href = "https://biblioteca5.ieti.site/admin/";
     return null;
   } else if (role === "bibliotecario") {
     content = (

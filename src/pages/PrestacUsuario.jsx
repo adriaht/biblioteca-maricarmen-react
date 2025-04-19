@@ -13,7 +13,7 @@ function PrestacUsuario({ username }) {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/prestecs", {
+      const response = await fetch("https://biblioteca5.ieti.site/api/prestecs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username }),
