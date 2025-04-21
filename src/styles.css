@@ -119,22 +119,16 @@ body {
   position: relative;
 }
 
-
-input{
-  background-color: white;
-  color: black !important;
+input {
+  color: var(--input-text) !important;
+}
 
 .navbar button {
   color: var(--navbar-text);
 }
 
-
-}
-
-
 /* Sidebar */
 .sidebar {
-
   width: 150px;
   display: flex;
   flex-direction: column;
@@ -192,18 +186,6 @@ input{
 
 .nav-item {
   margin-left: 25px;
-}
-
-
-/*gif*/
-.gif-banner {
-  width: 100%;
-  display: block;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 999;
-  /*pointer-events: none;  para que no interfiera con clicks */
 }
 
 .nav-link {

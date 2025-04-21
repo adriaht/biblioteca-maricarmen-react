@@ -81,11 +81,7 @@ function App() {
         </a>
       </>
     );
-  }
-
-  // Para usuarios autenticados (basado en el rol)
-  let content = null;
-  if (role === "admin") {
+  } else if (role === "admin") {
     window.location.href = "http://127.0.0.1:8000/admin/";
     return null;
   } else if (role === "bibliotecario") {
