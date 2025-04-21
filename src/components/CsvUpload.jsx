@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+
+import React, { useState, useRef } from "react";
 
 const CsvUpload = () => {
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errores, setErrores] = useState([]);
+  const fileInputRef = useRef(null);
+
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -31,22 +34,31 @@ const CsvUpload = () => {
       );
 
       const data = await response.json();
+      console.log("DATA:", data);
 
       if (response.ok) {
-        setMessage(
-          `✅ Archivo procesado correctamente. Registros recibidos: ${data.registros.length}`
-        );
+        console.log("OK:", data);
+        setMessage(`✅ Archivo procesado correctamente. Usuarios creados: ${data.usuarios_creados || 0}`);
         setErrores(data.errores || []);
       } else {
-        setMessage(`❌ Error: ${data.mensaje}`);
+        console.log("ERROR:", data);
+        setMessage(`❌ Error: ${data.mensaje || "Error desconocido."}`);
         setErrores(data.errores || []);
       }
+
+      
+      
     } catch (error) {
       console.error("Error al subir el archivo:", error);
       setMessage("❌ Error al subir el archivo.");
-    } finally {
-      setIsLoading(false);
-    }
+    }finally {
+        setIsLoading(false);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ""; // limpia el input visualmente
+        }
+        setFile(null); // limpia el estado interno
+      }
+      
   };
 
   return (
@@ -56,25 +68,30 @@ const CsvUpload = () => {
       </h2>
 
       <div className="mb-4 flex w-full flex-col justify-center">
-        <input
-          type="file"
-          accept=".csv"
-          onChange={handleFileChange}
-          className="bg-[#DDE1F1] text-black truncate py-2 rounded-md border-none focus:outline-none focus:ring-2 focus:ring-[#214093] focus:ring-opacity-50 cursor-pointer block "
-        />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".csv"
+        onChange={handleFileChange}
+        className="bg-[#DDE1F1] text-black truncate py-2 rounded-md border-none focus:outline-none focus:ring-2 focus:ring-[#214093] focus:ring-opacity-50 cursor-pointer block "
+      />
       </div>
 
       <div className="flex justify-around">
-        <button
+      <button
           onClick={handleUpload}
           className="bg-[#214093] text-white px-4 py-2 rounded-md border-none cursor-pointer shadow-md transition-all duration-100 ease-in-out active:bg-[#1A3379] active:translate-y-[1px] focus:outline-none"
           style={{ backgroundColor: "#214093" }}
         >
           {isLoading ? "Subiendo..." : "Subir Archivo"}
         </button>
+
         <button
           onClick={() => {
-            setFile(null); // Limpiar el archivo
+            if (fileInputRef.current) {
+              fileInputRef.current.value = "";
+            }
+            setFile(null);
             setMessage("");
             setErrores([]);
           }}
