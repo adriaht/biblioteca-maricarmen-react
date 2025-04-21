@@ -13,6 +13,7 @@ import PrestacUsuario from "./pages/PrestacUsuario";
 import gifBanner from "./assets/gifP3.gif";
 
 function App() {
+  // Estados generales
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState("");
   const [role, setRole] = useState("");
@@ -44,8 +45,9 @@ function App() {
     }
   }, []);
 
-  const handleLoginSuccess = () => setAuthenticated(true);
+  let content = null;
 
+  // Si no está autenticado, mostramos la vista de Login o BookList (público)
   if (!isAuthenticated) {
     return (
       <>
@@ -55,6 +57,7 @@ function App() {
           setAuthenticated={setAuthenticated}
           onCatalagClick={handleNavigateToSeeLandingPage}
           isToken={token}
+          changeToken={setToken}
         />
         <div className="main">
           {page === "login" ? (
@@ -80,9 +83,10 @@ function App() {
     );
   }
 
+  // Para usuarios autenticados (basado en el rol)
   let content = null;
   if (role === "admin") {
-    window.location.href = "https://biblioteca5.ieti.site/admin/";
+    window.location.href = "http://127.0.0.1:8000/admin/";
     return null;
   } else if (role === "bibliotecario") {
     content = (
@@ -92,6 +96,7 @@ function App() {
           onPerfilClick={handleNavigateToEditProfile}
           isToken={token}
           setAuthenticated={setAuthenticated}
+          changeToken={setToken}
         />
         <div className="main">
           <Sidebar
@@ -122,6 +127,7 @@ function App() {
           onPerfilClick={handleNavigateToEditProfile}
           isToken={token}
           setAuthenticated={setAuthenticated}
+          changeToken={setToken}
         />
         <div className="main">
           <Sidebar
@@ -158,14 +164,7 @@ function App() {
     content = <p>Rol desconocido</p>;
   }
 
-  return (
-    <div className="main">
-      {content}
-      <a href="https://www.iesesteveterradas.cat/" target="_blank" rel="noopener noreferrer">
-        <img src={gifBanner} alt="GIF de final de página" className="gif-banner" />
-      </a>
-    </div>
-  );
+  return <div className="main">{content}</div>;
 }
 
 export default App;

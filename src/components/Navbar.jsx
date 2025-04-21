@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import Button from './Button';
+import ThemeToggle from './ThemeToggle';
 
-function Navbar({ onLoginClick, onPerfilClick, setAuthenticated, onCatalagClick, style, isToken, setRole, ...others }) {
+function Navbar({ changeToken,onLoginClick, onPerfilClick, setAuthenticated, onCatalagClick, style, isToken, setRole, ...others }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
@@ -10,17 +11,23 @@ function Navbar({ onLoginClick, onPerfilClick, setAuthenticated, onCatalagClick,
     localStorage.removeItem('authToken');
     setAuthenticated(false);
     setMenuOpen(false);
+    changeToken(false)
+
+    console.log("token borrado: ",changeToken, "   token :    ",isToken)
+   
   };
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
+
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo" onClick={() => setMenuOpen(false)}>
-          Biblioteca Mari Carmen Brito
+          Biblioteca Maricarmen Brito
         </Link>
 
         <div className="menu-icon" onClick={toggleMenu}>
@@ -55,11 +62,16 @@ function Navbar({ onLoginClick, onPerfilClick, setAuthenticated, onCatalagClick,
                   }}
                 />
               </li>
-            
+
               <li className="nav-item">
-                <button onClick={handleLogout} className="logout-btn">
-                  Tancar Sessió
-                </button>
+                
+                <Button
+                  text="Tancar Sessió"
+                  onClick={() => {
+                    handleLogout();
+                    onCatalagClick();
+                  }}
+                />
               </li>
             </>
           ) : (
@@ -76,6 +88,10 @@ function Navbar({ onLoginClick, onPerfilClick, setAuthenticated, onCatalagClick,
               </li>
             </>
           )}
+          {/* Theme toggle */}
+          <li className="nav-item">
+            <ThemeToggle />
+          </li>
         </ul>
       </div>
     </nav>

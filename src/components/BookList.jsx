@@ -5,6 +5,7 @@ import imgReact from '../assets/esteve_terradas.jpeg';
 
 function BookList({ onSelectBook }) {
   const [books, setBooks] = useState([]);
+  const [exemplars, setExemplars] = useState([]);
   const [displayedBooks, setDisplayedBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchActive, setSearchActive] = useState(false);
@@ -17,13 +18,23 @@ function BookList({ onSelectBook }) {
   const fetchBooks = async () => {
     setLoading(true);
     try {
-      const response = await fetch('https://biblioteca5.ieti.site/api/llibres');
-      if (!response.ok) throw new Error('No se pudo obtener la lista de libros');
-      const data = await response.json();
-      setBooks(data);
-      setDisplayedBooks(data);
+
+      const [resBooks, resExemplars] = await Promise.all([
+        fetch('https://biblioteca5.ieti.site/api/llibres'),
+        fetch('https://biblioteca5.ieti.site/api/exemplars')
+      ]);
+
+      if (!resBooks.ok || !resExemplars.ok) throw new Error("Error en la carga");
+
+      const booksData = await resBooks.json();
+      const exemplarsData = await resExemplars.json();
+
+      setBooks(booksData);
+      setDisplayedBooks(booksData);
+      setExemplars(exemplarsData);
+
     } catch (error) {
-      console.error("Error fetching books:", error);
+      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
@@ -50,11 +61,15 @@ function BookList({ onSelectBook }) {
     setSearchActive(false);
   };
 
+  const getTotalDisponiblesPorLibro = (bookId) => {
+    return exemplars.filter(e => e.cataleg?.id === bookId && !e.baixa).length;
+  };
+
   return (
     <div className="container">
       <div className="header">
         <img src={imgReact} alt="React Logo" className="logo" />
-        <h1 className='h1'>Biblioteca Mari Carmen Brito</h1>
+        <h1 className='h1'>Biblioteca Maricarmen Brito</h1>
       </div>
 
       {!loading && (
@@ -90,13 +105,19 @@ function BookList({ onSelectBook }) {
                 onClick={() => onSelectBook(book.id)}
                 style={{ cursor: 'pointer' }}
               >
-                <BookItem book={book} onSelect={onSelectBook} />
+                <BookItem 
+                  book={book} 
+                  onSelect={onSelectBook}
+                  totalExemplars={getTotalDisponiblesPorLibro(book.id)} 
+                />
               </li>
             ))}
           </ul>
         ) : (
           <div className="no-books-container">
-            <p className="no-books-message">No s'han trobat llibres que coincideixin amb la teva cerca.</p>
+            <p className="no-books-message">
+              No s'han trobat llibres que coincideixin amb la teva cerca.
+            </p>
             {searchActive && (
               <button onClick={clearSearch} className="clear-search-btn">
                 Mostrar tots els llibres

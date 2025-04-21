@@ -18,20 +18,23 @@ function Sidebar({ onCSVClick, onPrestacClick, setAuthenticated, style, isToken,
           alignItems: "center",
           zIndex: 999,
           marginRight: "10px",
+         
+        
         }}
         {...others}
       >
-
+        {/* div para crear espacio en la parte superior */}
+        <div style={{height:"20px"}}></div>
         {isToken && setRole === "bibliotecario" && (
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button text="Carga de perfils en CSV"
+          <div  className="sidebarButton">
+            <Button text="Carrega de perfils en CSV"
               onClick={onCSVClick} />
           </div>
 
         )}
         {isToken && (
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button text="Prestacs"
+          <div className="sidebarButton">
+            <Button text="Préstecs"
               onClick={onPrestacClick} />
           </div>
         )}
