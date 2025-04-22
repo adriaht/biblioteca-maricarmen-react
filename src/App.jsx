@@ -160,7 +160,8 @@ function App() {
     content = <p>Rol desconocido</p>;
   }
 
-  return <div className="main">{content}</div>;
+  return <div >{content}</div>;
+
 }
 
 export default App;
