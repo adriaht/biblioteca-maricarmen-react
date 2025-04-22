@@ -151,7 +151,7 @@ function App() {
       </>
     );
   }
-  return <div className="main">{content}</div>;
+  return <div >{content}</div>;
 }
 
 export default App;
