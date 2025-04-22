@@ -14,7 +14,7 @@ function Perfil({ username, onBack }) {
   console.log("entramos en perfil");
 
   useEffect(() => {
-    fetch("https://biblioteca5.ieti.site/perfil/", {
+    fetch("https://biblioteca5.ieti.site/api/perfil/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username }),

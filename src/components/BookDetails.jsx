@@ -17,14 +17,14 @@ function BookDetails({ bookId, onBack, extraProp }) {
 
           signal: controller.signal
         });
-        if (!resBook.ok) {
+        if (!response.ok) {
           throw new Error('No se pudo obtener el libro');
         }
-        const bookData = await resBook.json();
+        const bookData = await response.json();
         console.log("Detalls del llibre:", JSON.stringify(bookData, null, 2));
 
         // 2. Obtenim tots els exemplars
-        const resExemplars = await fetch('http://127.0.0.1:8000/api/exemplars', {
+        const resExemplars = await fetch('https://biblioteca5.ieti.site/api/exemplars', {
           signal: controller.signal
         });
         if (!resExemplars.ok) {
