@@ -1,7 +1,7 @@
 // BookDetails.jsx
 import { useEffect, useState } from 'react';
 
-function BookDetails({ bookId, onBack, extraProp }) {
+function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -54,6 +54,7 @@ function BookDetails({ bookId, onBack, extraProp }) {
     };
 
     fetchBookDetails();
+    const esBibliotecario = userRole === "bibliotecario";
 
     return () => controller.abort();
   }, [bookId]);
@@ -175,6 +176,27 @@ function BookDetails({ bookId, onBack, extraProp }) {
               )}
               {extraProp && <p className="extra-prop">Prop extra: {extraProp}</p>}
             </div>
+             {/* Botó només per a bibliotecaris */}
+             {userRole === 'bibliotecario' && (
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+                <button
+                  onClick={() =>  onCrearPrestac && onCrearPrestac(bookId)}
+                  style={{
+                    backgroundColor: '#007BFF',
+                    color: 'white',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '1rem',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Fer préstec
+                </button>
+              </div>
+            )}
+
+
           </div>
         ) : (
           <p className="error-message">No s'ha trobat informació per a aquest llibre.</p>

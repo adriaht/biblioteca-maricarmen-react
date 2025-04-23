@@ -11,6 +11,8 @@ import CsvUpload from "./components/CsvUpload";
 import Prestacs from "./pages/Prestacs";
 import PrestacUsuario from "./pages/PrestacUsuario";
 import gifBanner from "./assets/gifP3.gif";
+import CrearPrestac from "./components/CrearPrestac";
+
 
 function App() {
   // Estados generales
@@ -22,11 +24,15 @@ function App() {
   const [page, setPage] = useState("bookList");
   const [selectedBookId, setSelectedBookId] = useState(null);
 
+
+
+
   const handleNavigateToEditProfile = () => setPage("Perfil");
   const handleNavigateToSeeLandingPage = () => setPage("bookList");
   const handleNavigateToLoginPage = () => setPage("login");
   const handleNavigateToCSVPage = () => setPage("CSV");
   const handleNavigateToPrestacPage = () => setPage("Prestac");
+  
 
   const handleSelectBook = (bookId) => {
     setSelectedBookId(bookId);
@@ -37,6 +43,21 @@ function App() {
     setSelectedBookId(null);
     setPage("bookList");
   };
+
+
+  // Lógica para abrir el componente CrearReserva
+
+    //boton reserva biblio
+  const [crearPrestacBookId, setCrearPrestacBookId] = useState(null);
+  
+  const handleAbrirCrearPrestac = (bookId) => {
+    setCrearPrestacBookId(bookId); // Pasa el bookId al componente CrearReserva
+    setPage("CrearPrestac"); // Cambia la página a "crearReserva"
+  };
+
+  
+  
+
 
   useEffect(() => {
     const storedToken = localStorage.getItem("authToken");
@@ -49,6 +70,10 @@ function App() {
 
   // Si no está autenticado, mostramos la vista de Login o BookList (público)
   if (!isAuthenticated) {
+    console.log("isAuthenticated:", isAuthenticated);
+console.log("role:", role);
+console.log("page:", page);
+
     return (
       <>
         <Navbar
@@ -70,10 +95,23 @@ function App() {
               onCatalagClick={handleNavigateToSeeLandingPage}
               backToLogin={handleNavigateToSeeLandingPage}
             />
+
+          ) : page === "CrearPrestac" ? (
+            <CrearPrestac 
+            bookId={crearPrestacBookId} 
+            onBack={() => setPage("detail")}  
+          />
+
           ) : page === "bookList" ? (
             <BookList onSelectBook={handleSelectBook} />
           ) : page === "detail" ? (
-            <BookDetails bookId={selectedBookId} onBack={handleBackFromDetails} extraProp="Valor extra" />
+            <BookDetails 
+              bookId={selectedBookId} 
+              onBack={handleBackFromDetails} 
+              extraProp="Valor extra"
+              userRole={role}
+              onCrearPrestac={handleAbrirCrearPrestac}  
+              />
           ) : null}
         </div>
         <a href="https://www.iesesteveterradas.cat/" target="_blank" rel="noopener noreferrer">
@@ -82,7 +120,8 @@ function App() {
       </>
     );
   } else if (role === "admin") {
-    window.location.href = "'https://biblioteca5.ieti.site/admin/";
+    window.location.href = 'https://biblioteca5.ieti.site/admin/';
+
     return null;
   } else if (role === "bibliotecario") {
     content = (
@@ -103,6 +142,7 @@ function App() {
           />
           {page === "Perfil" ? (
             <Perfil username={user} onBack={handleNavigateToSeeLandingPage} />
+         
           ) : page === "bookList" ? (
             <BookList onSelectBook={handleSelectBook} />
           ) : page === "CSV" ? (
@@ -110,7 +150,18 @@ function App() {
           ) : page === "Prestac" ? (
             <Prestacs username={user} />
           ) : page === "detail" ? (
-            <BookDetails bookId={selectedBookId} onBack={handleBackFromDetails} extraProp="Valor extra" />
+            <BookDetails
+            bookId={selectedBookId}
+            onBack={handleBackFromDetails}
+            extraProp="Valor extra" 
+            userRole={role} 
+            onCrearPrestac={handleAbrirCrearPrestac} 
+          />
+        ) : page === "CrearPrestac" ? (
+          <CrearPrestac 
+            bookId={crearPrestacBookId} 
+            onBack={() => setPage("detail")} 
+          />
           ) : null}
         </div>
       </>
@@ -139,7 +190,13 @@ function App() {
           ) : page === "Prestac" ? (
             <PrestacUsuario username={user} />
           ) : page === "detail" ? (
-            <BookDetails bookId={selectedBookId} onBack={handleBackFromDetails} extraProp="Valor extra" />
+            <BookDetails 
+            bookId={selectedBookId} 
+            onBack={handleBackFromDetails} 
+            extraProp="Valor extra"
+            userRole={role}
+            onCrearPrestac={handleAbrirCrearPrestac} 
+          />
           ) : null}
         </div>
       </>
