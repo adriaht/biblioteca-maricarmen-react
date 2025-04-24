@@ -25,6 +25,7 @@ function Perfil({ username, onBack }) {
       })
       .then((data) => {
         setProfileData(data);
+        console.log("imagen cargada :", data.imatge);
         setFormData(data); // Guardamos todos los datos, pero solo se editarán imagen, email y teléfono
       })
       .catch((err) => setError(err.message));
@@ -38,6 +39,7 @@ function Perfil({ username, onBack }) {
   // Al guardar, se envían solo los campos editables junto con el identificador (username)
   const handleSave = async () => {
     setMessage("");
+    console.log("imagen enviada :", formData.imatge);
     const dataToSend = {
       username: profileData.username,
       imatge: formData.imatge,
