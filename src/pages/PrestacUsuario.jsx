@@ -105,7 +105,7 @@ function PrestacUsuario({ username }) {
       )}
 
       {/* Paginador fijo en la parte inferior */}
-      <div
+      <div className="pagination-container"
         style={{
           position: "fixed",
           bottom: "20px",
@@ -121,13 +121,14 @@ function PrestacUsuario({ username }) {
         }}
       >
         {Array.from({ length: totalPages }, (_, i) => (
-          <button
+          <button className="paginator-button "
             key={i + 1}
             onClick={() => handlePageChange(i + 1)}
             style={{
               padding: "8px 12px",
-              backgroundColor: currentPage === i + 1 ? "#007bff" : "#e0e0e0",
-              color: currentPage === i + 1 ? "#fff" : "#000",
+              backgroundColor: currentPage === i + 1 ? "var(--button-bg)" : "#e0e0e0",
+              color: currentPage === i + 1 ? "var(--navbar-text)" : "#000",
+              borderColor: currentPage === i + 1 ? "var(--button-bg)" : "#000",
               border: "none",
               borderRadius: "4px",
               cursor: "pointer",
