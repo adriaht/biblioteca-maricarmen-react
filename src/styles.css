@@ -739,6 +739,120 @@ h3 {
   text-decoration: underline;
 }
 
+/* Estilos de paginación y estado inicial */
+.initial-state {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px var(--card-shadow);
+}
+
+.search-prompt {
+  color: var(--secondary-color);
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px var(--card-shadow);
+  margin: 30px auto;
+  max-width: 600px;
+}
+
+.empty-state-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.empty-state-message {
+  font-size: 18px;
+  color: var(--secondary-color);
+  text-align: center;
+  line-height: 1.6;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pagination-button,
+.pagination-number {
+  padding: 8px 12px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  min-width: 40px;
+  text-align: center;
+}
+
+.pagination-button {
+  background-color: var(--button-bg);
+  color: var(--navbar-text);
+  padding: 8px 16px;
+  font-weight: 500;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: var(--button-hover-bg);
+}
+
+.pagination-number:hover:not(.active) {
+  background-color: var(--border-color);
+}
+
+.pagination-number.active {
+  background-color: var(--navbar-bg);
+  color: var(--navbar-text);
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.pagination-button:disabled,
+.pagination-number:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-ellipsis {
+  padding: 8px;
+  color: var(--text-color);
+  font-weight: bold;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 768px) {
+  .pagination {
+    gap: 4px;
+  }
+  
+  .pagination-button,
+  .pagination-number {
+    padding: 6px 10px;
+    font-size: 12px;
+    min-width: 30px;
+  }
+  
+  .pagination-button {
+    padding: 6px 12px;
+  }
+}
 /* Adaptación a móviles */
 @media (max-width: 768px) {
   .books-grid {
