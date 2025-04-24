@@ -13,7 +13,7 @@ function BookList({ onSelectBook }) {
   
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const booksPerPage = 25;
+  const booksPerPage = 9;
 
   // Ya no cargamos todos los libros al inicio automáticamente
   // Sólo cargaremos los ejemplares para tener disponible esta información
