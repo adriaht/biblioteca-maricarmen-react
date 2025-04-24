@@ -453,6 +453,7 @@ h3 {
 /* Lista de libros */
 .books-section {
   margin-top: 20px;
+  width: 1000px;
 }
 
 .books-grid {
@@ -487,7 +488,7 @@ h3 {
   display: flex;
   flex-direction: column;
   min-height: 240px;
-  width: 425px;
+
 }
 
 .book-card:hover {
