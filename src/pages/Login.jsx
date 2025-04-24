@@ -66,6 +66,8 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
         console.log("Token recibido:", receivedToken);
         setToken(receivedToken); // Guardar el token en el estado local
 
+        localStorage.setItem("authToken", receivedToken);
+
         // Definir el rol según los grupos del usuario
         if (data.grupos.includes("Admin")) {
           setRole("admin");

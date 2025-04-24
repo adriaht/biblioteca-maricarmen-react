@@ -49,11 +49,14 @@ function App() {
 
     //boton reserva biblio
   const [crearPrestacBookId, setCrearPrestacBookId] = useState(null);
+  const [crearPrestacBookTitle, setCrearPrestacBookTitle] = useState("");
   
   const handleAbrirCrearPrestac = (bookId) => {
-    setCrearPrestacBookId(bookId); // Pasa el bookId al componente CrearReserva
-    setPage("CrearPrestac"); // Cambia la página a "crearReserva"
+    setCrearPrestacBookId(bookId);
+    
+    setPage("CrearPrestac");
   };
+  
 
   
   
@@ -61,18 +64,25 @@ function App() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("authToken");
-    if (storedToken) {
+    const storedRole = localStorage.getItem("role");
+    const storedUser = localStorage.getItem("username");
+  
+    if (storedToken && storedRole && storedUser) {
+      setToken(storedToken);
+      setRole(storedRole);
+      setUser(storedUser);
       setAuthenticated(true);
     }
   }, []);
+  
 
   let content = null;
 
   // Si no está autenticado, mostramos la vista de Login o BookList (público)
   if (!isAuthenticated) {
     console.log("isAuthenticated:", isAuthenticated);
-console.log("role:", role);
-console.log("page:", page);
+    console.log("role:", role);
+    console.log("page:", page);
 
     return (
       <>
@@ -99,6 +109,7 @@ console.log("page:", page);
           ) : page === "CrearPrestac" ? (
             <CrearPrestac 
             bookId={crearPrestacBookId} 
+            
             onBack={() => setPage("detail")}  
           />
 

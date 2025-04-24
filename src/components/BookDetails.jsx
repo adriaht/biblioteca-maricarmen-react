@@ -8,56 +8,60 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
 
   useEffect(() => {
     const controller = new AbortController();
-
     const fetchBookDetails = async () => {
-      setLoading(true);
-      try {
+        setLoading(true);
+        try {
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+                throw new Error('Token no disponible. Inicia sesión.');
+            }
 
-        const response = await fetch(`https://biblioteca5.ieti.site/api/llibres/${bookId}`, {
+            const response = await fetch(`https://biblioteca5.ieti.site/api/llibres/${bookId}`, {
+                signal: controller.signal,
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                }
+            });
+            if (!response.ok) {
+                throw new Error('No se pudo obtener el libro');
+            }
+            const bookData = await response.json();
+            console.log("Detalls del llibre:", JSON.stringify(bookData, null, 2));
 
-          signal: controller.signal
-        });
-        if (!response.ok) {
-          throw new Error('No se pudo obtener el libro');
+            // 2. Obtener los ejemplares
+            const resExemplars = await fetch('https://biblioteca5.ieti.site/api/exemplars', {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                }
+            });
+            if (!resExemplars.ok) {
+                throw new Error('No se pudo obtener la lista de ejemplars');
+            }
+            const exemplarsData = await resExemplars.json();
+            console.log("Llista d'exemplars:", JSON.stringify(exemplarsData, null, 2));
+
+            // Filtramos los ejemplares
+            const bookExemplars = exemplarsData.filter(exemplar =>
+                exemplar.cataleg?.id === bookData.id
+            );
+            console.log("Exemplars filtrats per aquest llibre:", JSON.stringify(bookExemplars, null, 2));
+
+            bookData.exemplars = bookExemplars;
+            setBook(bookData);
+        } catch (err) {
+            if (err.name !== 'AbortError') {
+                console.error("Error fetching book details:", err);
+                setError("No s'han pogut carregar els detalls del llibre.");
+            }
+        } finally {
+            setLoading(false);
         }
-        const bookData = await response.json();
-        console.log("Detalls del llibre:", JSON.stringify(bookData, null, 2));
-
-        // 2. Obtenim tots els exemplars
-        const resExemplars = await fetch('https://biblioteca5.ieti.site/api/exemplars', {
-          signal: controller.signal
-        });
-        if (!resExemplars.ok) {
-          throw new Error('No se pudo obtener la lista de exemplars');
-        }
-        const exemplarsData = await resExemplars.json();
-        console.log("Llista d'exemplars:", JSON.stringify(exemplarsData, null, 2));
-
-        // 3. Filtrar els exemplars relacionats amb aquest llibre:
-        // Assumim que cada exemplar té una propietat "cataleg" amb un camp "id"
-        const bookExemplars = exemplarsData.filter(exemplar => 
-          exemplar.cataleg?.id === bookData.id
-        );
-        console.log("Exemplars filtrats per aquest llibre:", JSON.stringify(bookExemplars, null, 2));
-
-        // Afegim la propietat "exemplars" al llibre
-        bookData.exemplars = bookExemplars;
-        setBook(bookData);
-      } catch (err) {
-        if (err.name !== 'AbortError') {
-          console.error("Error fetching book details:", err);
-          setError("No s'han pogut carregar els detalls del llibre.");
-        }
-      } finally {
-        setLoading(false);
-      }
     };
 
     fetchBookDetails();
-    const esBibliotecario = userRole === "bibliotecario";
-
     return () => controller.abort();
-  }, [bookId]);
+}, [bookId]);
+
 
   // Càlcul totals globals (sense comptar els de baixa)
   let totalExemplars = 0, totalExclosos = 0, totalNoExclosos = 0;
@@ -177,22 +181,17 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
               {extraProp && <p className="extra-prop">Prop extra: {extraProp}</p>}
             </div>
              {/* Botó només per a bibliotecaris */}
+             
              {userRole === 'bibliotecario' && (
               <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+                
                 <button
-                  onClick={() =>  onCrearPrestac && onCrearPrestac(bookId)}
-                  style={{
-                    backgroundColor: '#007BFF',
-                    color: 'white',
-                    padding: '0.75rem 1.5rem',
-                    fontSize: '1rem',
-                    border: 'none',
-                    borderRadius: '0.5rem',
-                    cursor: 'pointer'
-                  }}
+                  onClick={() => onCrearPrestac && onCrearPrestac(bookId)}
+                  className="bg-blue-600 text-white py-3 px-6 text-base rounded-lg hover:bg-blue-700 cursor-pointer"
                 >
                   Fer préstec
                 </button>
+
               </div>
             )}
 

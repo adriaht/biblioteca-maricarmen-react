@@ -20,8 +20,8 @@ function CrearPrestac({ bookId, onBack }) {
   // Función para crear el préstamo
   const handleCrearPrestac = async () => {
     if (!selectedUser || !selectedExemplar || !reservaFecha) {
-      setMessage("Por favor, completa todos los campos");
-      return;
+        setMessage("Por favor, completa todos los campos");
+        return;
     }
 
     const selectedDate = new Date(reservaFecha);
@@ -29,43 +29,49 @@ function CrearPrestac({ bookId, onBack }) {
     today.setHours(0, 0, 0, 0); // Reseteamos la hora
 
     if (selectedDate < today) {
-      setMessage("La fecha no puede ser anterior al día actual");
-      return;
+        setMessage("La fecha no puede ser anterior al día actual");
+        return;
     }
 
     try {
-      setLoading(prev => ({ ...prev, creating: true }));
-      setMessage("Creando préstamo...");
+        setLoading(prev => ({ ...prev, creating: true }));
+        setMessage("Creando préstamo...");
 
-      const token = localStorage.getItem("authToken");
-      const response = await fetch("https://biblioteca5.ieti.site/api/reserves/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          usuari: selectedUser.id,
-          exemplar: selectedExemplar.id,
-          data_reserva: reservaFecha,
-        }),
-      });
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            throw new Error('Token no disponible. Inicia sesión.');
+        }
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error al crear el préstamo");
-      }
+       
+       const response = await fetch("https://biblioteca5.ieti.site/api/crear_prestec", {
 
-      setMessage("✅ Préstamo creado correctamente");
-      setSelectedExemplar(null);
-      setReservaFecha("");
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+           
+            },
+            body: JSON.stringify({
+              usuari: selectedUser.id,
+              exemplar: selectedExemplar.id,
+            }),
+            
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Error al crear el préstamo");
+        }
+
+        setMessage("✅ Préstamo creado correctamente");
+        setSelectedExemplar(null);
+        setReservaFecha("");
     } catch (error) {
-      console.error("Error:", error);
-      setMessage(`❌ Error: ${error.message}`);
+        console.error("Error:", error);
+        setMessage(`❌ Error: ${error.message}`);
     } finally {
-      setLoading(prev => ({ ...prev, creating: false }));
+        setLoading(prev => ({ ...prev, creating: false }));
     }
-  };
+};
 
   // Buscar usuario cuando se ingresa texto en el campo de búsqueda
   useEffect(() => {
@@ -76,23 +82,35 @@ function CrearPrestac({ bookId, onBack }) {
         return;
       }
 
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        setMessage("Sesión no iniciada. Por favor inicia sesión.");
+        return;
+      }
+
       try {
         setLoading(prev => ({ ...prev, users: true }));
-        const token = localStorage.getItem("authToken");
 
-        const response = await fetch("https://biblioteca5.ieti.site/api/perfil/", {
+        const response = await fetch("https://biblioteca5.ieti.site/api/buscar_usuarios/", {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${token}`,
+            //"Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ username: search.trim() })
+          body: JSON.stringify({ query: search.trim() })
         });
 
-        if (!response.ok) throw new Error("No se encontró el usuario");
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.log("Error Response:", errorData);
+          setMessage("Error al buscar el usuario"); 
+          return;
+        }
+
+        
 
         const user = await response.json();
-        setFilteredUsers([user]);
+        setFilteredUsers(user);
         setMessage("");
       } catch (error) {
         console.error("Error al buscar usuario:", error);
@@ -109,6 +127,7 @@ function CrearPrestac({ bookId, onBack }) {
   // Buscar ejemplares del libro
   useEffect(() => {
     if (!bookId) return;
+  
 
     const fetchExemplars = async () => {
       setLoading(prev => ({ ...prev, exemplars: true }));
@@ -140,8 +159,14 @@ function CrearPrestac({ bookId, onBack }) {
 
   return (
     <>
-      <div className="max-w-2xl mx-auto p-4 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Crear préstamo</h1>
+    <div className="container">
+      <div className="max-w-2xl mt-10 mx-auto p-4 bg-white rounded-lg shadow-md">
+      <h3 className="text-xl font-semibold mb-6 text-center text-white py-3 rounded-md shadow"
+        style={{ backgroundColor: 'rgba(59, 130, 246, 0.5)' }}
+      >
+        Crear préstec
+      </h3>
+
 
         {/* Buscador de usuarios */}
         <div className="mb-6">
@@ -156,18 +181,18 @@ function CrearPrestac({ bookId, onBack }) {
 
         {/* Lista de usuarios */}
         {loading.users ? (
-          <p>Cargando usuarios...</p>
+          <p>Carregant usuaris...</p>
         ) : (
           filteredUsers.length > 0 && (
             <div className="mb-6">
-              <h2 className="text-lg font-semibold mb-2">Usuarios:</h2>
+              <h2 className="text-lg font-semibold mb-2">Usuaris:</h2>
               <div className="max-h-60 overflow-y-auto border rounded">
                 {filteredUsers.map(u => (
                   <div
-                    key={u.username}
+                  key={u.id}
                     onClick={() => setSelectedUser(u)}
                     className={`p-3 hover:bg-gray-100 cursor-pointer ${
-                      selectedUser?.username === u.username
+                      selectedUser?.id === u.id
                         ? "bg-blue-50 border-l-4 border-blue-500"
                         : ""
                     }`}
@@ -184,15 +209,31 @@ function CrearPrestac({ bookId, onBack }) {
         {selectedUser && (
           <>
             <div className="mb-4 p-2 border rounded bg-blue-50">
-              <p className="font-semibold">Usuario seleccionado:</p>
-              <p>{selectedUser.first_name} {selectedUser.last_name} - {selectedUser.email}</p>
+            <p className="font-semibold">Usuaris seleccionats:</p>
+            <p>{selectedUser.first_name} {selectedUser.last_name} - {selectedUser.email}</p>
+            <p>Telèfon: {selectedUser.telefon}</p>
+            {selectedUser.centre && <p>Centra: {selectedUser.centre}</p>}
+          </div>
+
+          <div className="mb-6 relative z-10">
+              <label className="block text-lg font-semibold mb-2">Data de préstec:</label>
+              <input
+                type="date"
+                value={reservaFecha}
+                onChange={(e) => setReservaFecha(e.target.value)}
+                className="w-full p-2 border rounded"
+                min={new Date().toISOString().split('T')[0]}
+                required
+              />
             </div>
+
+
 
             {/* Ejemplares y fecha */}
             <div className="mb-6">
-              <h2 className="text-lg font-semibold mb-2">Ejemplares disponibles:</h2>
+              <h2 className="text-lg font-semibold mb-2">Exemplars disponibles:</h2>
               {loading.exemplars ? (
-                <p>Cargando ejemplares...</p>
+                <p>Carregant exemplars...</p>
               ) : exemplars.length > 0 ? (
                 <div className="flex flex-col gap-2">
                   {exemplars.map(e => (
@@ -205,28 +246,17 @@ function CrearPrestac({ bookId, onBack }) {
                           : ""
                       }`}
                     >
-                      <p>Registro: {e.registre}</p>
-                      {e.centre && <p className="text-sm">Centro: {e.centre.nom}</p>}
+                      <p>Registre: {e.registre}</p>
+                      {e.centre && <p className="text-sm">Centre: {e.centre.nom}</p>}
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-red-500">No hay ejemplares disponibles</p>
+                <p className="text-red-500">No hi ha exemplars disponibles</p>
               )}
             </div>
 
-            <div className="mb-6">
-              <label className="block text-lg font-semibold mb-2">Fecha de préstamo:</label>
-              <input
-                type="date"
-                value={reservaFecha}
-                onChange={(e) => setReservaFecha(e.target.value)}
-                className="w-full p-2 border rounded"
-                min={new Date().toISOString().split('T')[0]}
-                required
-              />
-            </div>
-
+         
             <div className="flex justify-between">
               <Button
                 text={loading.creating ? "Creando..." : "Confirmar préstamo"}
@@ -259,7 +289,9 @@ function CrearPrestac({ bookId, onBack }) {
           </div>
         )}
       </div>
+      </div>
     </>
+    
   );
 }
 
