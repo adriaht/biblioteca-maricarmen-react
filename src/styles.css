@@ -487,6 +487,7 @@ h3 {
   display: flex;
   flex-direction: column;
   min-height: 240px;
+  width: 425px;
 }
 
 .book-card:hover {
@@ -739,6 +740,91 @@ h3 {
 .back-to-home:hover {
   color: var(--button-hover-bg);
   text-decoration: underline;
+}
+
+/* Estilos para el paginador - Añadir a styles.css */
+
+.pagination-container {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 15px 0;
+}
+
+.page-numbers {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.paginator-button {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  min-width: 40px;
+  text-align: center;
+}
+
+.paginator-button:hover {
+  background-color: var(--secondary-color);
+  color: var(--navbar-text);
+}
+
+.paginator-active {
+  background-color: var(--button-bg);
+  color: var(--navbar-text);
+  border-color: var(--button-bg);
+}
+
+.paginator-nav {
+  font-weight: 500;
+  min-width: 100px;
+}
+
+.paginator-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.paginator-ellipsis {
+  margin: 0 5px;
+}
+
+.results-count {
+  margin-right: 15px;
+  color: var(--secondary-color);
+  font-weight: 500;
+}
+
+.search-info {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Adaptaciones para móviles */
+@media (max-width: 768px) {
+  .pagination-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .paginator-nav {
+    width: 100%;
+    order: 2;
+  }
+  
+  .page-numbers {
+    order: 1;
+  }
 }
 
 /* Adaptación a móviles */
