@@ -121,6 +121,8 @@ body {
 
 input {
   color: var(--input-text) !important;
+  background-color: var(--card-bg);
+  border: 2px solid var(--border-color);
 }
 
 .navbar button {
