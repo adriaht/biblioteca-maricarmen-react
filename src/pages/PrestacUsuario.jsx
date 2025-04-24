@@ -105,7 +105,7 @@ function PrestacUsuario({ username }) {
       )}
 
       {/* Paginador fijo en la parte inferior */}
-      <div
+      <div className="pagination-container"
         style={{
           position: "fixed",
           bottom: "20px",
@@ -121,7 +121,7 @@ function PrestacUsuario({ username }) {
         }}
       >
         {Array.from({ length: totalPages }, (_, i) => (
-          <button
+          <button className="paginator-button paginator-nav"
             key={i + 1}
             onClick={() => handlePageChange(i + 1)}
             style={{
