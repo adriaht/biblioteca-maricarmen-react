@@ -159,7 +159,7 @@ function CrearPrestac({ bookId, onBack }) {
 
   return (
     <>
-    <div className="container">
+    <div className="container-books">
       <div className="max-w-2xl mt-10 mx-auto p-4 bg-white rounded-lg shadow-md">
       <h3 className="text-xl font-semibold mb-6 text-center text-white py-3 rounded-md shadow"
         style={{ backgroundColor: 'rgba(59, 130, 246, 0.5)' }}

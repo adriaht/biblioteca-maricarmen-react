@@ -131,7 +131,7 @@ function App() {
       </>
     );
   } else if (role === "admin") {
-    window.location.href = 'https://biblioteca5.ieti.site/admin/';
+    window.location.href = 'cd ';
 
     return null;
   } else if (role === "bibliotecario") {

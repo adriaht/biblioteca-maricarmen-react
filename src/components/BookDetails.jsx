@@ -189,7 +189,7 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
                 
                 <button
                   onClick={() => onCrearPrestac && onCrearPrestac(bookId)}
-                  className="bg-blue-600 text-white py-3 px-6 text-base rounded-lg hover:bg-blue-700 cursor-pointer"
+                  //className="bg-blue-600 text-white py-3 px-6 text-base rounded-lg hover:bg-blue-700 cursor-pointer"
                   style={{
                     backgroundColor: '#007BFF',
                     color: 'white',

@@ -116,7 +116,7 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
         onChange={(e) => setPasswordLocal(e.target.value)}
         autoComplete="current-password"
       />
-      <Button text="Iniciar sesión" onClick={handleLogin} />
+      <Button text="Iniciar sesión" onClick={handleLogin} className = "login-button" />
       {errorMessage && (
         <Paragraph style={{ color: "red" }}>{errorMessage}</Paragraph>
       )}

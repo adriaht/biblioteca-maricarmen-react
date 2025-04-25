@@ -281,6 +281,13 @@ input {
   padding: 20px;
 }
 
+.container-books {
+  width: 1000px !important;
+  order: 2;
+  margin: 0 auto;
+  padding: 20px;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -709,7 +716,7 @@ h3 {
 }
 
 .login-button {
-  width: 100%;
+  width: 25%;
   padding: 12px;
   background-color: var(--button-bg);
   color: var(--navbar-text);
