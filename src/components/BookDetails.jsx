@@ -1,4 +1,3 @@
-// BookDetails.jsx
 import { useEffect, useState } from 'react';
 
 function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
@@ -56,6 +55,7 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
         } finally {
             setLoading(false);
         }
+
     };
 
     fetchBookDetails();
@@ -98,7 +98,7 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
   }
 
   return (
-    <div className="book-details-container">
+    <div className="container">
       <button onClick={onBack} className="back-btn">← Tornar a la llista</button>
       <div className="book-details-card">
         <h2 className="details-title h2">Detalls del llibre</h2>
@@ -152,50 +152,59 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
                 </a>
               </div>
             )}
-            
+
             {/* Secció extra: Mostrem els totals i detalls per centre */}
             <div className="extra-info">
               {/* <h4>Detalls dels exemplars</h4> */}
               {/* <p>Total exemplars (sense baixa): {totalExemplars}</p>
               <p>Exclosos: {totalExclosos} | No exclosos: {totalNoExclosos}</p> */}
-              
+
               <h5>Exemplars disponiblen en cada centre:</h5>
               {Object.keys(centreStats).length > 0 ? (
-               <ul>
-               {Object.entries(centreStats).map(([centre, stats]) => (
-                 <li key={centre}>
-                   {centre}:{' '}
-                   <span style={{ color: 'red' }}>
-                     Exclosos: {stats.exclosos}
-                   </span>{' '}
-                   |{' '}
-                   <span style={{ color: 'green' }}>
-                     No exclosos: {stats.noExclosos}
-                   </span>
-                 </li>
-               ))}
-             </ul>
+                <ul>
+                  {Object.entries(centreStats).map(([centre, stats]) => (
+                    <li key={centre}>
+                      {centre}:{' '}
+                      <span style={{ color: 'red' }}>
+                        Exclosos: {stats.exclosos}
+                      </span>{' '}
+                      |{' '}
+                      <span style={{ color: 'green' }}>
+                        No exclosos: {stats.noExclosos}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               ) : (
                 <p>No hi ha exemplars disponibles per cap centre.</p>
               )}
               {extraProp && <p className="extra-prop">Prop extra: {extraProp}</p>}
             </div>
-             {/* Botó només per a bibliotecaris */}
-             
-             {userRole === 'bibliotecario' && (
+
+
+            {/* Botó només per a bibliotecaris */}
+            {userRole === 'bibliotecario' && (
+
               <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
                 
                 <button
                   onClick={() => onCrearPrestac && onCrearPrestac(bookId)}
                   className="bg-blue-600 text-white py-3 px-6 text-base rounded-lg hover:bg-blue-700 cursor-pointer"
+                  style={{
+                    backgroundColor: '#007BFF',
+                    color: 'white',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '1rem',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    cursor: 'pointer'
+                  }}
                 >
                   Fer préstec
                 </button>
 
               </div>
             )}
-
-
           </div>
         ) : (
           <p className="error-message">No s'ha trobat informació per a aquest llibre.</p>

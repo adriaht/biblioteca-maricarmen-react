@@ -8,6 +8,13 @@ function EditarPerfil({ formData, onChange, onSave, message }) {
   const [visibleMessage, setVisibleMessage] = useState("");
   const fileInputRef = useRef(null);
 
+  // Determina la URL que se mostrará en el <img>
+  const imgSrc = formData.imatge
+    ? formData.imatge.startsWith("data:")
+      ? formData.imatge
+      : `http://biblioteca5.ieti.site${formData.imatge}`
+    : null;
+
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -27,23 +34,17 @@ function EditarPerfil({ formData, onChange, onSave, message }) {
 
   useEffect(() => {
     const newErrors = {};
-
-    // Validación del teléfono
     const phoneRegex = /^[0-9]*$/;
     if (formData.telefon && !phoneRegex.test(formData.telefon)) {
       newErrors.telefon = "El campo Teléfono solo puede contener números.";
     }
-
-    // Validación del email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (formData.email && !emailRegex.test(formData.email)) {
       newErrors.email = "El formato del email no es válido.";
     }
-
     setErrors(newErrors);
   }, [formData.telefon, formData.email]);
 
-  // Mostrar el mensaje con timeout de 3 segundos
   useEffect(() => {
     if (message) {
       setVisibleMessage(message);
@@ -56,9 +57,9 @@ function EditarPerfil({ formData, onChange, onSave, message }) {
 
   return (
     <div>
-      {formData.imatge ? (
+      {imgSrc ? (
         <img
-          src={formData.imatge}
+          src={imgSrc}
           alt="Imagen de perfil"
           width="100"
           height="100"
@@ -66,14 +67,15 @@ function EditarPerfil({ formData, onChange, onSave, message }) {
             borderRadius: "50%",
             objectFit: "cover",
             marginBottom: "1em",
-            cursor: "pointer"
+            cursor: "pointer",
           }}
           onClick={handleImageClick}
         />
       ) : (
         <p
           style={{ cursor: "pointer", marginBottom: "1em" }}
-          onClick={handleImageClick}>
+          onClick={handleImageClick}
+        >
           No hay imagen de perfil, haz clic para agregarla
         </p>
       )}
@@ -86,7 +88,6 @@ function EditarPerfil({ formData, onChange, onSave, message }) {
         onChange={handleFileChange}
       />
 
-      {/* Campo Email */}
       <LabelInput
         label="Email:"
         name="email"
@@ -99,8 +100,7 @@ function EditarPerfil({ formData, onChange, onSave, message }) {
         </Paragraph>
       )}
 
-      {/* Campo Teléfono */}
-      <LabelInput styleInput={{ color:"white" }}
+      <LabelInput
         label="Teléfono:"
         name="telefon"
         value={formData.telefon || ""}
@@ -112,7 +112,6 @@ function EditarPerfil({ formData, onChange, onSave, message }) {
         </Paragraph>
       )}
 
-      {/* Mensaje con timeout */}
       {visibleMessage && (
         <Paragraph style={{ color: "green", marginTop: "1em" }}>
           {visibleMessage}

@@ -5,14 +5,16 @@ function SearchBox({ books, onSearch, onSelectBook }) {
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
 
+  // Buscar resultados en tiempo real solo cuando tenemos libros cargados
   useEffect(() => {
-    if (searchTerm.length >= 3) {
+    if (searchTerm.length >= 3 && books && books.length > 0) {
+      // Filtramos los libros que coincidan con el término de búsqueda
       const filteredBooks = books
         .filter(book => 
           book.titol.toLowerCase().includes(searchTerm.toLowerCase()) || 
           (book.autor && book.autor.toLowerCase().includes(searchTerm.toLowerCase()))
         )
-        .slice(0, 5); // Limitar a 5 resultados
+        .slice(0, 5); // Limitamos a 5 resultados
       
       setSearchResults(filteredBooks);
       setShowResults(true);
@@ -26,6 +28,7 @@ function SearchBox({ books, onSearch, onSelectBook }) {
     e.preventDefault();
     if (searchTerm.length >= 3) {
       onSearch(searchTerm);
+      setSearchTerm('');
       setShowResults(false);
     }
   };
@@ -36,6 +39,7 @@ function SearchBox({ books, onSearch, onSelectBook }) {
 
   const handleItemClick = (bookId) => {
     onSelectBook(bookId);
+    setSearchTerm('');
     setShowResults(false);
   };
 
@@ -44,7 +48,7 @@ function SearchBox({ books, onSearch, onSelectBook }) {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Cercar llibres per titol o autor..."
+          placeholder="Cercar llibres per títol o autor..."
           value={searchTerm}
           onChange={handleInputChange}
           className="search-input search-box-color"

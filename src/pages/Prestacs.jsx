@@ -4,7 +4,7 @@ import Paragraph from "../components/Paragraph"
 
 function Prestacs({ username}) {
     return (
-        <div>
+        <div className="container">
             <Header level={2}>Hola, {username} (Bibliotecario)</Header>
             
         </div>
