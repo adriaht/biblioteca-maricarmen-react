@@ -57,7 +57,7 @@ const CsvUpload = () => {
 
   return (
     <div className="container">
-      <div className="p-6 max-w-md mx-auto bg-gray-200 rounded-lg shadow-md border-2 border-gray-300"
+      <div className="mt-24 p-6 max-w-md mx-auto bg-gray-200 rounded-lg shadow-md border-2 border-gray-300"
         style={{
           backgroundColor: "var(--card-bg)",
           borderColor: "var(--border-color)",
