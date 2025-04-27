@@ -51,9 +51,10 @@ function App() {
   const [crearPrestacBookId, setCrearPrestacBookId] = useState(null);
   const [crearPrestacBookTitle, setCrearPrestacBookTitle] = useState("");
   
-  const handleAbrirCrearPrestac = (bookId) => {
+  const handleAbrirCrearPrestac = (bookId, bookTitle) => {
+    console.log("Recibido en handleAbrirCrearPrestac:", bookId, bookTitle); 
     setCrearPrestacBookId(bookId);
-    
+    setCrearPrestacBookTitle(bookTitle);
     setPage("CrearPrestac");
   };
   
@@ -171,6 +172,7 @@ function App() {
         ) : page === "CrearPrestac" ? (
           <CrearPrestac 
             bookId={crearPrestacBookId} 
+            bookTitle={crearPrestacBookTitle}
             onBack={() => setPage("detail")} 
           />
           ) : null}

@@ -16,11 +16,12 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
             }
 
             const response = await fetch(`https://biblioteca5.ieti.site/api/llibres/${bookId}`, {
-                signal: controller.signal,
+               signal: controller.signal,
                 headers: {
-                    "Authorization": `Bearer ${token}`,
+                   "Authorization": `Bearer ${token}`,
                 }
             });
+           
             if (!response.ok) {
                 throw new Error('No se pudo obtener el libro');
             }
@@ -188,7 +189,7 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
               <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
                 
                 <button
-                  onClick={() => onCrearPrestac && onCrearPrestac(bookId)}
+                  onClick={() => onCrearPrestac && onCrearPrestac(bookId, book.titol)}
                   //className="bg-blue-600 text-white py-3 px-6 text-base rounded-lg hover:bg-blue-700 cursor-pointer"
                   style={{
                     backgroundColor: '#007BFF',

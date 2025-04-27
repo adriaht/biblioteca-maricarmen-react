@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import LabelInput from "./LabelInput";
 import Button from "./Button";
 
-function CrearPrestac({ bookId, onBack }) {
+function CrearPrestac({ bookId, bookTitle, onBack }) {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [search, setSearch] = useState("");
@@ -164,8 +164,14 @@ function CrearPrestac({ bookId, onBack }) {
       <h3 className="text-xl font-semibold mb-6 text-center text-white py-3 rounded-md shadow"
         style={{ backgroundColor: 'rgba(59, 130, 246, 0.5)' }}
       >
-        Crear préstec
+        Crear préstec 
       </h3>
+      <h2
+        className="text-lg font-semibold mb-6 text-center text-blue-500 bg-white border border-blue-500 py-2 rounded-md shadow"
+      >
+        {bookTitle}
+      </h2>
+
 
 
         {/* Buscador de usuarios */}
