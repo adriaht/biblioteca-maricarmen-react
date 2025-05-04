@@ -27,8 +27,10 @@ function BookList({ onSelectBook }) {
     try {
 
       const [resBooks, resExemplars] = await Promise.all([
-        fetch('https://biblioteca5.ieti.site/api/llibres'),
-        fetch('https://biblioteca5.ieti.site/api/exemplars')
+        // fetch('https://biblioteca5.ieti.site/api/llibres'),
+        // fetch('https://biblioteca5.ieti.site/api/exemplars')
+        fetch('http://127.0.0.1:8000/api/llibres'),
+        fetch('http://127.0.0.1:8000/api/exemplars')
       ]);
 
       if (!resBooks.ok || !resExemplars.ok) throw new Error("Error en la carga");

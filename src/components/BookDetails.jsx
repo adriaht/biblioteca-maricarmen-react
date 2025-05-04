@@ -15,7 +15,8 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
                 throw new Error('Token no disponible. Inicia sesión.');
             }
 
-            const response = await fetch(`https://biblioteca5.ieti.site/api/llibres/${bookId}`, {
+            // const response = await fetch(`https://biblioteca5.ieti.site/api/llibres/${bookId}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/llibres/${bookId}`, {
                signal: controller.signal,
                 headers: {
                    "Authorization": `Bearer ${token}`,
@@ -29,7 +30,8 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
             console.log("Detalls del llibre:", JSON.stringify(bookData, null, 2));
 
             // 2. Obtener los ejemplares
-            const resExemplars = await fetch('https://biblioteca5.ieti.site/api/exemplars', {
+          // const resExemplars = await fetch('https://biblioteca5.ieti.site/api/exemplars', {
+            const resExemplars = await fetch('http://127.0.0.1:8000/api/exemplars', {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                 }
