@@ -7,7 +7,7 @@ import Paragraph from "../components/Paragraph";
 import Sidebar from "../components/Sidebar";
 
 function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCatalag, backToLogin }) {
-  console.log("Login iniciado ...");
+  console.log("Login iniciat ...");
 
   const [username, setUsernameLocal] = useState("");
   const [password, setPasswordLocal] = useState("");
@@ -27,21 +27,21 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
   }, []);
 
   useEffect(() => {
-    console.log("Grupos actualizados:", localGrupos);
+    console.log("Grups actualitzats:", localGrupos);
   }, [localGrupos]);
 
   const handleSaveCredentials = () => {
     localStorage.setItem("username", username);
     localStorage.setItem("password", password);
-    console.log("Credenciales guardadas:", { username, password });
+    console.log("Credencials guardades:", { username, password });
   };
 
   const handleLogin = async () => {
-    console.log("Botón de login clickeado");
+    console.log("Botó de login clickat");
     handleSaveCredentials();
 
     try {
-      console.log("Enviando solicitud con:", { username, password });
+      console.log("Enviant sol·licitud amb:", { username, password });
       const response = await fetch("https://biblioteca5.ieti.site/api/login", {
         method: "POST",
         headers: {
@@ -100,23 +100,23 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
     <div className="container"style={{marginTop:"80px",width:"700px"}}>
       <Header level={1}>Login</Header>
       <LabelInput
-        label="Username"
+        label="Nom d'usuari"
         type="text"
         value={username}
-        placeholder="Introduce tu nombre de usuario"
+        placeholder="Introduïu el vostre nom d'usuari"
         onChange={(e) => setUsernameLocal(e.target.value)}
         autoComplete="username"
       />
       <br />
       <LabelInput
-        label="Password"
+        label="Contrasenya"
         type="password"
         value={password}
-        placeholder="Introduce tu contraseña"
+        placeholder="Introdueix la teva contrasenya"
         onChange={(e) => setPasswordLocal(e.target.value)}
         autoComplete="current-password"
       />
-      <Button text="Iniciar sesión" onClick={handleLogin} className = "login-button" />
+      <Button text="Inicia sessió" onClick={handleLogin} className = "login-button" />
       {errorMessage && (
         <Paragraph style={{ color: "red" }}>{errorMessage}</Paragraph>
       )}

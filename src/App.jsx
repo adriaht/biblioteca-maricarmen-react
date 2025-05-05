@@ -227,7 +227,7 @@ function App() {
       </>
     );
   } else {
-    content = <p>Rol desconocido</p>;
+    content = <p>Rol desconegut</p>;
   }
 
   return <div >{content}</div>;

@@ -20,12 +20,12 @@ function Perfil({ username, onBack }) {
       body: JSON.stringify({ username }),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Error al cargar perfil");
+        if (!res.ok) throw new Error("Error en carregar perfil");
         return res.json();
       })
       .then((data) => {
         setProfileData(data);
-        console.log("imagen cargada :", data.imatge);
+        console.log("imatge carregada :", data.imatge);
         setFormData(data); // Guardamos todos los datos, pero solo se editarán imagen, email y teléfono
       })
       .catch((err) => setError(err.message));
@@ -39,7 +39,7 @@ function Perfil({ username, onBack }) {
   // Al guardar, se envían solo los campos editables junto con el identificador (username)
   const handleSave = async () => {
     setMessage("");
-    console.log("imagen enviada :", formData.imatge);
+    console.log("imatge enviada: ", formData.imatge);
     const dataToSend = {
       username: profileData.username,
       imatge: formData.imatge,
@@ -63,9 +63,9 @@ function Perfil({ username, onBack }) {
           body: JSON.stringify(dataToSend),
         });
       
-        setMessage("Perfil actualizado correctamente.");
+        setMessage("Perfil actualitzat correctament.");
       } else {
-        setMessage("No hay cambios para guardar.");
+        setMessage("No hi ha canvis per desar.");
       }
     } catch (err) {
       setMessage("Error al actualizar el perfil.");
@@ -80,11 +80,11 @@ function Perfil({ username, onBack }) {
       </div>
     );
   }
-  if (!profileData) return <Paragraph>Cargando perfil...</Paragraph>;
+  if (!profileData) return <Paragraph>Carregant perfil...</Paragraph>;
 
   return (
     <div className="container">
-      <Header level={1}>Editar perfil de {profileData.username}</Header>
+      <Header level={1}>Edita perfil de {profileData.username}</Header>
 
       {/* Componente para editar imagen, email y teléfono */}
       <EditarPerfil

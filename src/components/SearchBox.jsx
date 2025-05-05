@@ -48,7 +48,7 @@ function SearchBox({ books, onSearch, onSelectBook }) {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Cercar llibres per títol o autor..."
+          placeholder="Cercar llibres pel títol o per l'autor..."
           value={searchTerm}
           onChange={handleInputChange}
           className="search-input search-box-color"

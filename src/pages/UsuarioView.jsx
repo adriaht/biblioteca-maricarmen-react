@@ -8,7 +8,7 @@ function UsuariView({ username, grupos,  }) {
     return (
       <div>
         <Header level={2}>Hola, {username} (Usuari)</Header>
-        <Paragraph>Grupos: {grupos.join(", ")}</Paragraph>
+        <Paragraph>Grups: {grupos.join(", ")}</Paragraph>
       </div>
     );
   }

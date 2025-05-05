@@ -9,8 +9,8 @@ function BibliotecarioView({ username, grupos, goToPerfil, goToCatalag }) {
         <div>
          
             <Header level={2}>Panel del Bibliotecario</Header>
-            <Paragraph>Bienvenido/a, {username}. Tienes privilegios de edición.</Paragraph>
-            <Paragraph>Grupos: {grupos.join(", ")}</Paragraph>
+            <Paragraph>Hola, {username}. Tens privilegis d'edició.</Paragraph>
+            <Paragraph>Grups: {grupos.join(", ")}</Paragraph>
             {/* Aquí podrías añadir botones para gestionar libros, usuarios, etc. */}
         </div>
     );

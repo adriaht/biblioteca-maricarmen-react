@@ -12,7 +12,7 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
         try {
             const token = localStorage.getItem("authToken");
             if (!token) {
-                throw new Error('Token no disponible. Inicia sesión.');
+                throw new Error('Token no disponible. Inicia sessió.');
             }
 
             const response = await fetch(`https://biblioteca5.ieti.site/api/llibres/${bookId}`, {
@@ -23,7 +23,7 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
             });
            
             if (!response.ok) {
-                throw new Error('No se pudo obtener el libro');
+                throw new Error("No s'ha pogut obtenir el llibre");
             }
             const bookData = await response.json();
             console.log("Detalls del llibre:", JSON.stringify(bookData, null, 2));
@@ -122,7 +122,7 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
               {book.colleccio && <div className="metadata-item"><span>Colecció:</span> {book.colleccio}</div>}
               {book.data_edicio && (
                 <div className="metadata-item">
-                  <span>Fecha de edición:</span> {new Date(book.data_edicio).toLocaleDateString()}
+                  <span>Data d'edició:</span> {new Date(book.data_edicio).toLocaleDateString()}
                 </div>
               )}
               {book.pagines && <div className="metadata-item"><span>Páginas:</span> {book.pagines}</div>}

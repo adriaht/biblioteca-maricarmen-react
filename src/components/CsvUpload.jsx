@@ -13,7 +13,7 @@ const CsvUpload = () => {
 
   const handleUpload = async () => {
     if (!file) {
-      setMessage("❌ Por favor, selecciona un archivo.");
+      setMessage("❌ Si us plau, seleccioneu un fitxer.");
       return;
     }
 
@@ -36,16 +36,16 @@ const CsvUpload = () => {
 
       if (response.ok) {
         console.log("OK:", data);
-        setMessage(`✅ Archivo procesado correctamente. Usuarios creados: ${data.usuarios_creados || 0}`);
+        setMessage(`✅ Fitxer processat correctament. Usuaris creats: ${data.usuarios_creados || 0}`);
         setErrores(data.errores || []);
       } else {
         console.log("ERROR:", data);
-        setMessage(`❌ Error: ${data.mensaje || "Error desconocido."}`);
+        setMessage(`❌ Error: ${data.mensaje || "Error desconegut."}`);
         setErrores(data.errores || []);
       }
     } catch (error) {
-      console.error("Error al subir el archivo:", error);
-      setMessage("❌ Error al subir el archivo.");
+      console.error("Error en pujar el fitxer:", error);
+      setMessage("❌ Error en pujar el fitxer.");
     } finally {
       setIsLoading(false);
       if (fileInputRef.current) {
@@ -64,7 +64,7 @@ const CsvUpload = () => {
         }}>
         <h2 className="text-black text-3xl font-semibold text-center mb-4"
           style={{ color: "var(--text-color)" }}>
-          Subir CSV
+          Pujar CSV
         </h2>
 
         <div className="mb-4 flex w-full flex-col justify-center">
@@ -85,7 +85,7 @@ const CsvUpload = () => {
               backgroundColor: "var(--button-bg)",
             }}
           >
-            {isLoading ? "Subiendo..." : "Subir Archivo"}
+            {isLoading ? "Pujant..." : "Pujar Arxiu"}
           </button>
           <button
             onClick={() => {
@@ -101,7 +101,7 @@ const CsvUpload = () => {
               backgroundColor: "var(--button-bg)",
             }}
           >
-            Cancelar
+            Cancel·la
           </button>
         </div>
 
@@ -114,7 +114,7 @@ const CsvUpload = () => {
               {errores.map((err, index) => (
                 <li key={index}>
                   <div className="mb-1 font-medium">
-                    ({index + 1}) Email: {err.fila.email} — Motivo: {err.error}
+                    ({index + 1}) Email: {err.fila.email} — Motiu: {err.error}
                   </div>
                 </li>
               ))}

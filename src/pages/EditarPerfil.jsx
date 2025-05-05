@@ -36,11 +36,11 @@ function EditarPerfil({ formData, onChange, onSave, message }) {
     const newErrors = {};
     const phoneRegex = /^[0-9]*$/;
     if (formData.telefon && !phoneRegex.test(formData.telefon)) {
-      newErrors.telefon = "El campo Teléfono solo puede contener números.";
+      newErrors.telefon = "El camp Telèfon només pot contenir números.";
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (formData.email && !emailRegex.test(formData.email)) {
-      newErrors.email = "El formato del email no es válido.";
+      newErrors.email = "El format de correu electrònic no és vàlid.";
     }
     setErrors(newErrors);
   }, [formData.telefon, formData.email]);
@@ -60,7 +60,7 @@ function EditarPerfil({ formData, onChange, onSave, message }) {
       {imgSrc ? (
         <img
           src={imgSrc}
-          alt="Imagen de perfil"
+          alt="Imatge de perfil"
           width="100"
           height="100"
           style={{
@@ -76,7 +76,7 @@ function EditarPerfil({ formData, onChange, onSave, message }) {
           style={{ cursor: "pointer", marginBottom: "1em" }}
           onClick={handleImageClick}
         >
-          No hay imagen de perfil, haz clic para agregarla
+          No hi ha imatge de perfil, fes clic per afegir-la
         </p>
       )}
 

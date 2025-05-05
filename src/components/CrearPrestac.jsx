@@ -20,7 +20,7 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
   // Función para crear el préstamo
   const handleCrearPrestac = async () => {
     if (!selectedUser || !selectedExemplar || !reservaFecha) {
-        setMessage("Por favor, completa todos los campos");
+        setMessage("Si us plau, completa tots els camps");
         return;
     }
 
@@ -29,17 +29,17 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
     today.setHours(0, 0, 0, 0); // Reseteamos la hora
 
     if (selectedDate < today) {
-        setMessage("La fecha no puede ser anterior al día actual");
+        setMessage("La data no pot ser anterior al dia actual");
         return;
     }
 
     try {
         setLoading(prev => ({ ...prev, creating: true }));
-        setMessage("Creando préstamo...");
+        setMessage("Creant préstec...");
 
         const token = localStorage.getItem("authToken");
         if (!token) {
-            throw new Error('Token no disponible. Inicia sesión.');
+            throw new Error('Token no disponible. Inicia sessió.');
         }
 
        
@@ -59,10 +59,10 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || "Error al crear el préstamo");
+            throw new Error(errorData.message || "Error en crear el préstec");
         }
 
-        setMessage("✅ Préstamo creado correctamente");
+        setMessage("✅ Préstec creat correctament");
         setSelectedExemplar(null);
         setReservaFecha("");
     } catch (error) {
@@ -84,7 +84,7 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
 
       const token = localStorage.getItem("authToken");
       if (!token) {
-        setMessage("Sesión no iniciada. Por favor inicia sesión.");
+        setMessage("Sessió no iniciada. Si us plau inicia sessió.");
         return;
       }
 
@@ -103,7 +103,7 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
         if (!response.ok) {
           const errorData = await response.json();
           console.log("Error Response:", errorData);
-          setMessage("Error al buscar el usuario"); 
+          setMessage("Error en cercar l'usuari"); 
           return;
         }
 
@@ -113,9 +113,9 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
         setFilteredUsers(user);
         setMessage("");
       } catch (error) {
-        console.error("Error al buscar usuario:", error);
+        console.error("Error en cercar l'usuari:", error);
         setFilteredUsers([]);
-        setMessage("Usuario no encontrado");
+        setMessage("Usuari no trobat");
       } finally {
         setLoading(prev => ({ ...prev, users: false }));
       }
@@ -145,7 +145,7 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
         setExemplars(disponibles);
       } catch (error) {
         console.error("Error:", error);
-        setMessage(`Error al cargar ejemplares: ${error.message}`);
+        setMessage(`Error en carregar exemplars: ${error.message}`);
       } finally {
         setLoading(prev => ({ ...prev, exemplars: false }));
       }
@@ -180,7 +180,7 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar usuario..."
+            placeholder="Cerca usuari..."
             className="w-full p-2 border rounded"
           />
         </div>
