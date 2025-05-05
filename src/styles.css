@@ -468,7 +468,14 @@ h3 {
 /* Lista de libros */
 .books-section {
   margin-top: 20px;
-  width: 1000px;
+  width: auto;
+}
+
+.gif-banner {
+ 
+  margin: 20px auto 0; 
+  display: block; 
+  width: fit-content; 
 }
 
 .books-grid {
@@ -839,15 +846,18 @@ h3 {
   .page-numbers {
     order: 1;
   }
-}
 
-/* Adaptación a móviles */
-@media (max-width: 768px) {
+
   .books-grid {
     grid-template-columns: 1fr;
   }
   
   .container {
+    padding: 15px;
+  }
+
+  .container-books {
+    max-width: 350px;
     padding: 15px;
   }
   
