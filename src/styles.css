@@ -841,6 +841,191 @@ h3 {
   }
 }
 
+/* Estilos para la pagina de exemplares y impresion de etiquetas */
+
+/* Contenedor general de la lista */
+.exemplars-list {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--card-shadow);
+  border: 1px solid var(--border-color);
+}
+
+/* Estilo para cada ítem */
+
+.exemplar-item p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.exemplar-item {
+  display: flex;
+  flex-direction: column;
+  padding: 1.2rem 1.5rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.6); /* fondo difuminado claro */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 15px var(--card-shadow);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.theme-dark .exemplar-item {
+  background: rgba(30, 30, 30, 0.4); /* fondo difuminado oscuro */
+}
+
+.exemplar-item:hover {
+  transform: translateY(-3px);
+  background-color: var(--table-bg-hover);
+}
+
+/* Elementos internos */
+.exemplar-item .title {
+  margin: 0;
+  color: var(--navbar-bg);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.exemplar-item .author {
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+  margin-top: 0.4rem;
+}
+
+.exemplar-item .year,
+.exemplar-item .details {
+  font-size: 0.85rem;
+  color: var(--text-color);
+  margin-top: 0.3rem;
+}
+
+.batch-actions{
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.batch-btn{
+
+  background-color: var(--table-bg);
+  padding: 10px;
+
+}
+
+
+
+.add-remove-btn{
+  margin-left: 40px;
+  background-color: var(--table-bg);
+  padding: 10px;
+}
+
+.carrito-list {
+  display: table;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  background-color: var(--table-bg);
+  padding: 0.5rem;
+}
+
+.carrito-item {
+  display: table-row;
+  background-color: var(--card-bg);
+  box-shadow: 0 2px 4px var(--card-shadow);
+  border-radius: 8px;
+  overflow: hidden;
+  color: var(--text-color);
+  transition: background-color 0.3s ease;
+}
+
+.carrito-item:nth-child(even) {
+  background-color: var(--table-bg-hover);
+}
+
+.carrito-item:hover {
+  background-color: var(--table-bg-hover);
+}
+
+.carrito-item > * {
+  display: table-cell;
+  padding: 12px 16px;
+  vertical-align: middle;
+}
+
+.carrito-item {
+  display: flex;
+  align-items: center;        /* Centra verticalmente el texto y el botón */
+  justify-content: space-between; /* Espacia al máximo el contenido */
+  /* opcional: padding, border, etc. */
+}
+.carrito-item .remove-btn:hover {
+  color: red;
+}
+
+
+/* impresion de etiquetas */
+
+.printPage {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 10mm;
+  box-sizing: border-box;
+}
+
+@media print {
+  .printPage { page: imprimirPage; }
+  @page imprimirPage { size: A4; margin: 10mm; }
+  body > *:not(.printPage) { display: none !important; }
+  .printPage { position: absolute; top: 0; left: 0; }
+}
+
+.labelsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+.labelsTable td {
+  border: 1px solid #333;
+  padding: 4mm;
+  vertical-align: top;
+}
+
+.labelCenter {
+  font-weight: bold;
+  margin-bottom: 2mm;
+}
+
+.barcodeImg {
+  display: block;
+  margin-top: 2mm;
+  height: 40px;
+}
+
+.labelCdu {
+  font-style: italic;
+  font-size: 9pt;
+}
+
+.emptyCell {
+  border: none;
+}
+
+
+
+/* 
+
+
+*/
+
 /* Adaptación a móviles */
 @media (max-width: 768px) {
   .books-grid {

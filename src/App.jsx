@@ -12,6 +12,9 @@ import Prestacs from "./pages/Prestacs";
 import PrestacUsuario from "./pages/PrestacUsuario";
 import gifBanner from "./assets/gifP3.gif";
 import CrearPrestac from "./components/CrearPrestac";
+import Exemplars from "./pages/Exemplars";
+import CarritoExemplars from "./components/CarritoExemplars";
+
 
 
 function App() {
@@ -43,6 +46,18 @@ function App() {
     setSelectedBookId(null);
     setPage("bookList");
   };
+
+  const handleNavigateToExemplars = () => {
+console.log("handleNavigateToExemplars");
+    setPage("exemplars");
+  };
+
+  const handleNavigateToCarrito = () => {
+    console.log("handleNavigateToCarrito");
+        setPage("carrito");
+      };
+
+
 
 
   // Lógica para abrir el componente CrearReserva
@@ -150,6 +165,7 @@ function App() {
             isToken={token}
             setRole={role}
             onPrestacClick={handleNavigateToPrestacPage}
+            onExemplarsClick={handleNavigateToExemplars}
             onCSVClick={handleNavigateToCSVPage}
           />
           {page === "Perfil" ? (
@@ -175,6 +191,10 @@ function App() {
             bookTitle={crearPrestacBookTitle}
             onBack={() => setPage("detail")} 
           />
+          ) : page === "exemplars" ? (
+            <Exemplars goToCarrito={handleNavigateToCarrito} />
+          ) : page === "carrito" ? (
+            <CarritoExemplars goToExemplars={handleNavigateToExemplars} />
           ) : null}
         </div>
       </>

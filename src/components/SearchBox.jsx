@@ -1,22 +1,20 @@
-import { useState, useEffect } from 'react';
+// SearchBox.jsx
+import React, { useState, useEffect } from 'react';
 
 function SearchBox({ books, onSearch, onSelectBook }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
 
-  // Buscar resultados en tiempo real solo cuando tenemos libros cargados
   useEffect(() => {
-    if (searchTerm.length >= 3 && books && books.length > 0) {
-      // Filtramos los libros que coincidan con el término de búsqueda
-      const filteredBooks = books
-        .filter(book => 
-          book.titol.toLowerCase().includes(searchTerm.toLowerCase()) || 
-          (book.autor && book.autor.toLowerCase().includes(searchTerm.toLowerCase()))
+    if (searchTerm.length >= 3 && books.length > 0) {
+      const filtered = books
+        .filter(book =>
+          book.titol?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          book.autor?.toLowerCase().includes(searchTerm.toLowerCase())
         )
-        .slice(0, 5); // Limitamos a 5 resultados
-      
-      setSearchResults(filteredBooks);
+        .slice(0, 5);
+      setSearchResults(filtered);
       setShowResults(true);
     } else {
       setSearchResults([]);
@@ -33,43 +31,47 @@ function SearchBox({ books, onSearch, onSelectBook }) {
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleItemClick = (bookId) => {
-    onSelectBook(bookId);
+  const handleSelect = (book) => {
+    onSelectBook(book.id);
     setSearchTerm('');
     setShowResults(false);
   };
 
   return (
-    <div className="search-container">
-      <form onSubmit={handleSubmit}>
+    <div
+      className="search-container"
+      onBlur={() => setTimeout(() => setShowResults(false), 100)}
+    >
+      <form onSubmit={handleSubmit} className="search-form">
         <input
           type="text"
-          placeholder="Cercar llibres per títol o autor..."
+          className="search-input"
           value={searchTerm}
-          onChange={handleInputChange}
-          className="search-input search-box-color"
+          onChange={handleChange}
+          placeholder="Cercar llibres per títol o autor..."
+          onFocus={() => searchResults.length > 0 && setShowResults(true)}
         />
-        <button type="submit" className="search-button">
-          Cercar
-        </button>
+        <button type="submit" className="search-button">🔍</button>
       </form>
-      
+
       {showResults && (
         <div className="search-results">
           {searchResults.length > 0 ? (
             searchResults.map(book => (
-              <div 
+              <div
                 key={book.id}
                 className="search-result-item"
-                onClick={() => handleItemClick(book.id)}
+                onMouseDown={() => handleSelect(book)}
                 style={{ cursor: 'pointer' }}
               >
                 <div className="search-result-title">{book.titol}</div>
-                <div className="search-result-author">{book.autor || "Autor desconegut"}</div>
+                <div className="search-result-author">
+                  {book.autor || 'Autor desconegut'}
+                </div>
               </div>
             ))
           ) : (

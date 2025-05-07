@@ -10,17 +10,12 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
     const fetchBookDetails = async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem("authToken");
-            if (!token) {
-                throw new Error('Token no disponible. Inicia sesión.');
-            }
+   
+       
 
             // const response = await fetch(`https://biblioteca5.ieti.site/api/llibres/${bookId}`, {
             const response = await fetch(`http://127.0.0.1:8000/api/llibres/${bookId}`, {
-               signal: controller.signal,
-                headers: {
-                   "Authorization": `Bearer ${token}`,
-                }
+               signal: controller.signal
             });
            
             if (!response.ok) {
@@ -31,11 +26,7 @@ function BookDetails({ bookId, onBack, extraProp, userRole, onCrearPrestac }) {
 
             // 2. Obtener los ejemplares
           // const resExemplars = await fetch('https://biblioteca5.ieti.site/api/exemplars', {
-            const resExemplars = await fetch('http://127.0.0.1:8000/api/exemplars', {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                }
-            });
+            const resExemplars = await fetch('http://127.0.0.1:8000/api/exemplars');
             if (!resExemplars.ok) {
                 throw new Error('No se pudo obtener la lista de ejemplars');
             }
