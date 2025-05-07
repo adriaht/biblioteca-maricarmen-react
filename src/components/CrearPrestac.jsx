@@ -82,11 +82,7 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
         return;
       }
 
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        setMessage("Sessió no iniciada. Si us plau inicia sessió.");
-        return;
-      }
+     
 
       try {
         setLoading(prev => ({ ...prev, users: true }));
@@ -94,7 +90,6 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
         const response = await fetch("https://biblioteca5.ieti.site/api/buscar_usuarios/", {
           method: "POST",
           headers: {
-            //"Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
           },
           body: JSON.stringify({ query: search.trim() })
@@ -160,7 +155,8 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
   return (
     <>
     <div className="container-books">
-      <div className="max-w-2xl mt-10 mx-auto p-4 bg-white rounded-lg shadow-md">
+    <div className="w-[800px] mt-10 mx-auto p-4 bg-white rounded-lg shadow-md">
+
       <h3 className="text-xl font-semibold mb-6 text-center text-white py-3 rounded-md shadow"
         style={{ backgroundColor: 'rgba(59, 130, 246, 0.5)' }}
       >
