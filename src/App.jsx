@@ -88,6 +88,7 @@ function App() {
     return (
       <>
         <Navbar
+          user={user}
           onLoginClick={handleNavigateToLoginPage}
           setRole={setRole}
           setAuthenticated={setAuthenticated}
@@ -139,6 +140,7 @@ function App() {
     content = (
       <>
         <Navbar
+          user={user}
           onCatalagClick={handleNavigateToSeeLandingPage}
           onPerfilClick={handleNavigateToEditProfile}
           isToken={token}
@@ -183,6 +185,7 @@ function App() {
     content = (
       <>
         <Navbar
+          user={user}
           onCatalagClick={handleNavigateToSeeLandingPage}
           onPerfilClick={handleNavigateToEditProfile}
           isToken={token}
@@ -218,6 +221,7 @@ function App() {
     content = (
       <>
         <Navbar
+          user={user}
           onCatalagClick={handleNavigateToSeeLandingPage}
           isToken={token}
           setRole={setRole}

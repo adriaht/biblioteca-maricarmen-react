@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Button from './Button';
 import ThemeToggle from './ThemeToggle';
 
-function Navbar({ changeToken,onLoginClick, onPerfilClick, setAuthenticated, onCatalagClick, style, isToken, setRole, ...others }) {
+function Navbar({user, changeToken,onLoginClick, onPerfilClick, setAuthenticated, onCatalagClick, style, isToken, setRole, ...others }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
@@ -29,6 +29,18 @@ function Navbar({ changeToken,onLoginClick, onPerfilClick, setAuthenticated, onC
         <Link to="/" className="navbar-logo" onClick={() => setMenuOpen(false)}>
           Biblioteca Maricarmen Brito
         </Link>
+
+        {isToken && user && (
+        <li className="nav-item list-none">
+          <span className="text-white px-3 text-sm sm:text-base truncate max-w-[100px] sm:max-w-none">
+            Hola, {user}
+          </span>
+        </li>
+      )}
+
+
+
+
 
         <div className="menu-icon" onClick={toggleMenu}>
           <div className={menuOpen ? 'hamburger open' : 'hamburger'}>
