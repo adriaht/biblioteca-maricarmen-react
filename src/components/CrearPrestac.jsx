@@ -17,6 +17,15 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
     creating: false
   });
 
+  //estado fecha
+  const [retornFecha, setRetornFecha] = useState(() => {
+    const today = new Date();
+    const nextWeek = new Date(today);
+    nextWeek.setDate(today.getDate() + 7);
+    return nextWeek.toISOString().split('T')[0];
+  });
+  
+
   // Función para crear el préstamo
   const handleCrearPrestac = async () => {
     if (!selectedUser || !selectedExemplar || !reservaFecha) {
@@ -53,7 +62,10 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
             body: JSON.stringify({
               usuari: selectedUser.id,
               exemplar: selectedExemplar.id,
+              data_prestec: reservaFecha,
+              data_retorn: retornFecha
             }),
+            
             
         });
 
@@ -129,9 +141,7 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
       try {
         const token = localStorage.getItem("authToken");
         const response = await fetch("https://biblioteca5.ieti.site/api/exemplars/", {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
+          
         });
         const data = await response.json();
         const disponibles = data.filter(
@@ -228,6 +238,18 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
                 required
               />
             </div>
+
+            <div className="mb-6 relative z-10">
+            <label className="block text-lg font-semibold mb-2">Data de retorn prevista:</label>
+            <input
+              type="date"
+              value={retornFecha}
+              onChange={(e) => setRetornFecha(e.target.value)}
+              className="w-full p-2 border rounded"
+              min={reservaFecha || new Date().toISOString().split('T')[0]}
+            />
+          </div>
+
 
 
 

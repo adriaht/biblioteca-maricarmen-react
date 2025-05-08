@@ -186,6 +186,18 @@ input {
   cursor: pointer;
 }
 
+/*login en narvar*/
+.user-greeting {
+  color: white;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  font-size: 0.875rem;      
+  display: inline-block;
+  white-space: nowrap;
+}
+
+
+
 .nav-menu {
   display: flex;
   align-items: center;
@@ -947,6 +959,17 @@ h3 {
     margin: 10px auto;
     padding: 12px 0;
   }
+
+
+  .user-greeting {
+    font-size: 1rem;  
+  }
+
+  .navbar-logo {
+    font-size: 1rem;
+    
+  }
+  
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {

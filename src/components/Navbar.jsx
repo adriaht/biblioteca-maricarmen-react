@@ -32,11 +32,13 @@ function Navbar({user, changeToken,onLoginClick, onPerfilClick, setAuthenticated
 
         {isToken && user && (
         <li className="nav-item list-none">
-          <span className="text-white px-3 text-sm sm:text-base truncate max-w-[100px] sm:max-w-none">
+          <span className="user-greeting">
             Hola, {user}
           </span>
         </li>
       )}
+
+
 
 
 
