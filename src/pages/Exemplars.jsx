@@ -26,7 +26,8 @@ function Exemplars({ goToCarrito }) {
   }));
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/exemplars')
+    fetch('https://biblioteca5.ieti.site/api/exemplars')
+    // fetch('http://127.0.0.1:8000/api/exemplars')
       .then(res => {
         if (!res.ok) throw new Error('Error fetching exemplars');
         return res.json();
@@ -45,13 +46,31 @@ function Exemplars({ goToCarrito }) {
 
   const handleSearch = term => {
     if (loading) return;
-    const t = term.toLowerCase();
+    const t = term.trim();
     setSearchTerm(term);
-    setSearchActive(term.length >= 3);
-    const result = exemplars.filter(e =>
-      e.registre.toLowerCase().includes(t) ||
-      (e.cataleg?.titol || '').toLowerCase().includes(t)
-    );
+    setSearchActive(t.length >= 3);
+
+    let result = [];
+    const parts = t.split(/\s+/);
+
+    // Nuevo: búsqueda por rango de dos registros completos
+    // Formato esperado: "REG-0275-2703 REG-0275-3003"
+    if (parts.length === 2 && parts[0].toUpperCase().startsWith('REG-') && parts[1].toUpperCase().startsWith('REG-')) {
+      const start = parts[0].toUpperCase();
+      const end = parts[1].toUpperCase();
+      result = exemplars.filter(e => {
+        const reg = e.registre.toUpperCase();
+        return reg >= start && reg <= end;
+      });
+    } else {
+      // Búsqueda normal por texto
+      const low = t.toLowerCase();
+      result = exemplars.filter(e =>
+        e.registre.toLowerCase().includes(low) ||
+        (e.cataleg?.titol || '').toLowerCase().includes(low)
+      );
+    }
+
     setFiltered(result);
     setCurrentPage(1);
   };
@@ -82,20 +101,16 @@ function Exemplars({ goToCarrito }) {
     }
   };
 
-  // ── NUEVO: función de impresión ─────────────────────────────────
-  const handlePrint = () => {
-    setPrintMode(true);
-  };
+  const handlePrint = () => { setPrintMode(true); };
+  const handlePrintOff = () => { setPrintMode(false); };
 
-  // ── Paginación ───────────────────────────────────────────────────
+  // Paginación
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const indexFirst = (currentPage - 1) * itemsPerPage;
   const currentItems = filtered.slice(indexFirst, indexFirst + itemsPerPage);
 
   const selectAllFiltered = () => {
-    const newSelections = filtered.filter(
-      item => !selected.some(s => s.id === item.id)
-    );
+    const newSelections = filtered.filter(item => !selected.some(s => s.id === item.id));
     setSelected(prev => [...prev, ...newSelections]);
   };
 
@@ -106,78 +121,34 @@ function Exemplars({ goToCarrito }) {
     let start = currentPage - pos;
     let end = start + maxPagesToShow - 1;
 
-    if (start < 1) {
-      start = 1;
-      end = Math.min(totalPages, maxPagesToShow);
-    }
-    if (end > totalPages) {
-      end = totalPages;
-      start = Math.max(1, end - maxPagesToShow + 1);
-    }
+    if (start < 1) { start = 1; end = Math.min(totalPages, maxPagesToShow); }
+    if (end > totalPages) { end = totalPages; start = Math.max(1, end - maxPagesToShow + 1); }
     if (start > 1) pages.push(<span key="start-ellipsis">...</span>);
-    for (let i = start; i <= end; i++) {
-      pages.push(
-        <button
-          key={i}
-          onClick={() => setCurrentPage(i)}
-          className={`paginator-button ${currentPage === i ? 'paginator-active' : ''}`}
-        >
-          {i}
-        </button>
-      );
-    }
+    for (let i = start; i <= end; i++) pages.push(
+      <button key={i} onClick={() => setCurrentPage(i)} className={`paginator-button ${currentPage === i ? 'paginator-active' : ''}`}>{i}</button>
+    );
     if (end < totalPages) pages.push(<span key="end-ellipsis">...</span>);
 
     return (
       <div className="pagination-container">
-        <button
-          onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
-          disabled={currentPage === 1}
-          className="paginator-button paginator-nav"
-        >
-          Anterior
-        </button>
+        <button onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1} className="paginator-button paginator-nav">Anterior</button>
         <div className="page-numbers">{pages}</div>
-        <button
-          onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
-          disabled={currentPage === totalPages}
-          className="paginator-button paginator-nav"
-        >
-          Següent
-        </button>
+        <button onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages} className="paginator-button paginator-nav">Següent</button>
       </div>
     );
   };
 
-  // ── Si está en modo impresión, mostramos SOLO el componente de etiquetas ──
   if (printMode) {
-    return (
-      <ImprimirExemplars
-        items={selected}
-        centerName="Biblioteca Municipal de Tarragona"
-      />
-    );
+    return <ImprimirExemplars items={selected} onPrint={handlePrintOff} />;
   }
 
-  // ── Renderizado normal ──────────────────────────────────────────────
   return (
     <div className="container">
       <div className="exemplars-container" onClick={e => e.stopPropagation()}>
         <header className="exemplars-header">
           <h1>Gestión de Exemplars</h1>
-          <div
-            className="carrito-summary"
-            style={{ margin: '10px' }}
-            onClick={handleToggleCarrito}
-          >
-            {selectedCarrito ? (
-              <span className="back-icon">← Volver</span>
-            ) : (
-              <>
-                <span className="carrito-icon">Lista 🛒: </span>
-                <span className="carrito-count">{selected.length}</span>
-              </>
-            )}
+          <div className="carrito-summary" style={{ margin: '10px' }} onClick={handleToggleCarrito}>
+            {selectedCarrito ? <span className="back-icon">← Volver</span> : <><span className="carrito-icon">Lista 🛒: </span><span className="carrito-count">{selected.length}</span></>}
           </div>
         </header>
 
@@ -186,7 +157,7 @@ function Exemplars({ goToCarrito }) {
             items={selected}
             onRemove={handleRemove}
             onClearAll={handleClearAll}
-            onPrint={handlePrint}              // <— lo pasamos aquí
+            onPrint={handlePrint}
             goToExemplars={goToCarrito}
           />
         ) : (
@@ -199,21 +170,13 @@ function Exemplars({ goToCarrito }) {
                   <p>Carregant exemplars...</p>
                 </div>
               ) : (
-                <SearchBox
-                  books={booksForSearch}
-                  onSearch={handleSearch}
-                  onSelectBook={handleSelect}
-                />
+                <SearchBox books={booksForSearch} onSearch={handleSearch} onSelectBook={handleSelect} />
               )}
 
               {searchActive && (
                 <div className="batch-actions">
-                  <button onClick={selectAllFiltered} className="batch-btn">
-                    Seleccionar tots
-                  </button>
-                  <button onClick={handleClearAll} className="batch-btn">
-                    Borrar tots
-                  </button>
+                  <button onClick={selectAllFiltered} className="batch-btn">Seleccionar tots</button>
+                  <button onClick={handleClearAll} className="batch-btn">Borrar tots</button>
                 </div>
               )}
             </div>
@@ -223,13 +186,7 @@ function Exemplars({ goToCarrito }) {
                 <h2>Resultats per: "{searchTerm}"</h2>
                 <div className="search-info">
                   <span>{filtered.length} exemplars trobats</span>
-                  <button
-                    style={{ marginLeft: '10px' }}
-                    onClick={() => setSearchActive(false)}
-                    className="clear-search-btn"
-                  >
-                    Nova cerca
-                  </button>
+                  <button style={{ marginLeft: '10px' }} onClick={() => setSearchActive(false)} className="clear-search-btn">Nova cerca</button>
                 </div>
               </div>
             )}
@@ -238,17 +195,8 @@ function Exemplars({ goToCarrito }) {
               <ul className="exemplars-list">
                 {currentItems.map(item => (
                   <li key={item.id} className="exemplar-item">
-                    <span>
-                      {item.registre} — {item.cataleg?.titol}
-                    </span>
-                    <button
-                      onClick={() =>
-                        selected.some(s => s.id === item.id)
-                          ? handleRemove(item.id)
-                          : handleSelect(item.id)
-                      }
-                      className="add-remove-btn"
-                    >
+                    <span>{item.registre} — {item.cataleg?.titol}</span>
+                    <button onClick={() => selected.some(s => s.id === item.id) ? handleRemove(item.id) : handleSelect(item.id)} className="add-remove-btn">
                       {selected.some(s => s.id === item.id) ? 'Eliminar' : 'Afegir'}
                     </button>
                   </li>

@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import Button from './Button';
 
-function CarritoExemplars({ items, onRemove, onClearAll,  onPrint }) {
-  const contadorCarrito = items.length;
-
-  // Paginación
+function CarritoExemplars({ items, onRemove, onPrint }) {
   const [currentPage, setCurrentPage] = useState(1);
+  const contadorCarrito = items.length;
   const itemsPerPage = 20;
   const totalPages = Math.ceil(contadorCarrito / itemsPerPage);
   const indexFirst = (currentPage - 1) * itemsPerPage;
@@ -14,10 +12,18 @@ function CarritoExemplars({ items, onRemove, onClearAll,  onPrint }) {
   const handlePrev = () => setCurrentPage(p => Math.max(p - 1, 1));
   const handleNext = () => setCurrentPage(p => Math.min(p + 1, totalPages));
 
+  // Nueva función para borrar todo sin usar onClearAll
+  const handleClearAll = () => {
+    // Eliminamos cada ítem uno por uno
+    items.forEach(item => onRemove(item.id));
+    // Reiniciamos la paginación
+    setCurrentPage(1);
+  };
+
   const renderPagination = () => {
     const pages = [];
     const maxPagesToShow = 5;
-    const positionIndex = maxPagesToShow - 2; // penultimate
+    const positionIndex = maxPagesToShow - 2; // antepenúltima posición
 
     let startPage = currentPage - positionIndex;
     let endPage = startPage + maxPagesToShow - 1;
@@ -74,24 +80,23 @@ function CarritoExemplars({ items, onRemove, onClearAll,  onPrint }) {
 
   return (
     <div className="carrito-container" onClick={e => e.stopPropagation()}>
-      {contadorCarrito > 0 && (
+      {contadorCarrito > 0 ? (
         <>
           <br />
           <span className="badge">Quantitat d'exemplars: {contadorCarrito}</span>
           <button
-            onClick={onClearAll}
+            onClick={handleClearAll}
             className="add-remove-btn"
           >
             Buidar carretó
           </button>
           <button
-            onClick={ onPrint}
+            onClick={onPrint}
             className="add-remove-btn"
           >
             Imprimir etiquetes
           </button>
-          <br />
-          <br />
+          <br /><br />
           <div className="carrito-dropdown">
             <div className="carrito-list">
               {currentItems.map(item => (
@@ -106,14 +111,11 @@ function CarritoExemplars({ items, onRemove, onClearAll,  onPrint }) {
                 </div>
               ))}
             </div>
-
             {/* Paginador */}
             {totalPages > 1 && renderPagination()}
           </div>
         </>
-      )}
-
-      {contadorCarrito === 0 && (
+      ) : (
         <span>Encara no n'hi ha ningun exemplar a la llista</span>
       )}
     </div>

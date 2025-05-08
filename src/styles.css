@@ -17,6 +17,8 @@
   --border-color: #DDE1F1;
   --table-bg-hover: #ccc;
   --table-bg:  #DDE1F1;
+  --etiqueta-table-bg:  #ffffff;
+  --etiqueta-text-color: #000000;
 }
 
 /* 2. Si el sistema está en dark y NO hay clases, se activan vars dark */
@@ -36,6 +38,8 @@
     --border-color: #333;
     --table-bg-hover: #383845;
     --table-bg:  #333;
+    --etiqueta-table-bg:  #333;
+    --etiqueta-text-color: #e0e0e0;
 
   }
 }
@@ -56,6 +60,8 @@
   --border-color: #DDE1F1;  
   --table-bg-hover: #ccc;
   --table-bg:  #DDE1F1;
+  --etiqueta-table-bg:  #ffffff;
+  --etiqueta-text-color: #000000;
 }
 .theme-dark {
   --bg-color: #1b1a1a;
@@ -72,6 +78,8 @@
     --border-color: #333;
     --table-bg-hover: #383845;
     --table-bg:  #333;
+    --etiqueta-table-bg:  #333;
+    --etiqueta-text-color: #e0e0e0;
 }
 
 
@@ -975,52 +983,83 @@ h3 {
 
 /* impresion de etiquetas */
 
-.printPage {
-  width: 210mm;
-  min-height: 297mm;
-  padding: 10mm;
-  box-sizing: border-box;
+.imprimir-container {
+  margin: 0;
+  padding: 0;
 }
 
-@media print {
-  .printPage { page: imprimirPage; }
-  @page imprimirPage { size: A4; margin: 10mm; }
-  body > *:not(.printPage) { display: none !important; }
-  .printPage { position: absolute; top: 0; left: 0; }
+.print-btn {
+  margin-bottom: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: var(--button-bg);
+  color: white;
+}
+
+.printPage {
+  width: 210mm;
+  height: 297mm;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
 }
 
 .labelsTable {
   width: 100%;
+  height: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
+
 .labelsTable td {
-  border: 1px solid #333;
-  padding: 4mm;
+  color: var(--etiqueta-text-color);
+  background-color: var(--etiqueta-table-bg);
+  width: 4.8cm;
+  height: 1.7cm;
+  padding: 0;
+  box-sizing: border-box;
+  border: 1px solid var(--text-color);
   vertical-align: top;
-}
-
-.labelCenter {
-  font-weight: bold;
-  margin-bottom: 2mm;
-}
-
-.barcodeImg {
-  display: block;
-  margin-top: 2mm;
-  height: 40px;
-}
-
-.labelCdu {
-  font-style: italic;
-  font-size: 9pt;
+  overflow: hidden;
 }
 
 .emptyCell {
   border: none;
 }
 
+.labelCenter {
+  font-weight: bold;
+  font-size: 6pt;
+  text-align: center;
+}
 
+.barcodeImg {
+  
+  width: 100%;
+  display: block;
+  height: 35px;
+  padding: 1mm;
 
+}
+
+.labelCdu {
+  margin-left: 10px;
+  font-style: italic;
+  font-size: 8pt;
+
+}
+
+.labelCDU{
+  margin-left: 10px;
+  font-weight: bold;
+  font-style: italic ;
+  font-size: 10pt ;  
+  text-align: center;
+  width: 100%;
+}
 /* 
 
 
