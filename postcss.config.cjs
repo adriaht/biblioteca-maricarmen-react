@@ -1,7 +1,7 @@
-// postcss.config.cjs
+// postcss.config.js
 module.exports = {
   plugins: {
-    tailwindcss: {},
+    "@tailwindcss/postcss7-compat": {},
     autoprefixer: {},
   },
 };
