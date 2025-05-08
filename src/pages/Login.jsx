@@ -42,6 +42,7 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
 
     try {
       console.log("Enviando solicitud con:", { username, password });
+      // const response = await fetch("https://biblioteca5.ieti.site/api/login", {
       const response = await fetch("http://127.0.0.1:8000/api/login", {
         method: "POST",
         headers: {
@@ -65,6 +66,8 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
         const receivedToken = data.token;  // Aquí supongo que el token viene en data.token
         console.log("Token recibido:", receivedToken);
         setToken(receivedToken); // Guardar el token en el estado local
+
+        localStorage.setItem("authToken", receivedToken);
 
         // Definir el rol según los grupos del usuario
         if (data.grupos.includes("Admin")) {
@@ -114,7 +117,7 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
         onChange={(e) => setPasswordLocal(e.target.value)}
         autoComplete="current-password"
       />
-      <Button text="Iniciar sesión" onClick={handleLogin} />
+      <Button text="Iniciar sesión" onClick={handleLogin} className = "login-button" />
       {errorMessage && (
         <Paragraph style={{ color: "red" }}>{errorMessage}</Paragraph>
       )}

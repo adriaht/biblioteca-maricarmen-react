@@ -1,4 +1,6 @@
+
 function BookItem({ book, onSelect, totalExemplars }) {
+
   return (
     <div className="book-card">
       <h3 className="book-title h3">{book.titol}</h3>
@@ -30,6 +32,7 @@ function BookItem({ book, onSelect, totalExemplars }) {
       >
         Veure detalls
       </button>
+
     </div>
   );
 }

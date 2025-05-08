@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "./Button";
 
-function Sidebar({ onCSVClick, onPrestacClick, setAuthenticated, style, isToken, setRole, ...others }) {
+function Sidebar({ onCSVClick, onPrestacClick, setAuthenticated, style,onExemplarsClick, isToken, setRole, ...others }) {
   return (
     <div className="sidebar">
       <div
@@ -18,18 +18,25 @@ function Sidebar({ onCSVClick, onPrestacClick, setAuthenticated, style, isToken,
           alignItems: "center",
           zIndex: 999,
           marginRight: "10px",
-         
-        
+
+
         }}
         {...others}
       >
         {/* div para crear espacio en la parte superior */}
-        <div style={{height:"20px"}}></div>
-        {isToken && setRole === "bibliotecario" && (
-          <div  className="sidebarButton">
+        <div style={{ height: "20px" }}></div>
+        {isToken && setRole === "bibliotecario" && (<>
+          <div className="sidebarButton">
             <Button text="Carrega de perfils en CSV"
               onClick={onCSVClick} />
           </div>
+
+          <div className="sidebarButton">
+            <Button text="Cercar exemplars"
+              onClick={onExemplarsClick} />
+
+          </div>
+        </>
 
         )}
         {isToken && (

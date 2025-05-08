@@ -25,10 +25,20 @@ function BookList({ onSelectBook }) {
 
   const fetchExemplars = async () => {
     try {
-      const resExemplars = await fetch('http://127.0.0.1:8000/api/exemplars');
-      if (!resExemplars.ok) throw new Error("Error en la carga de ejemplares");
+
+      const [resBooks, resExemplars] = await Promise.all([
+        fetch('https://biblioteca5.ieti.site/api/llibres'),
+        fetch('https://biblioteca5.ieti.site/api/exemplars')
+        // fetch('http://127.0.0.1:8000/api/llibres'),
+        // fetch('http://127.0.0.1:8000/api/exemplars')
+      ]);
+
+      if (!resBooks.ok || !resExemplars.ok) throw new Error("Error en la carga");
+
+      const booksData = await resBooks.json();
       const exemplarsData = await resExemplars.json();
       setExemplars(exemplarsData);
+
     } catch (error) {
       console.error("Error fetching exemplars data:", error);
     }
@@ -36,7 +46,8 @@ function BookList({ onSelectBook }) {
 
   const fetchAllBooks = async () => {
     try {
-      const resBooks = await fetch('http://127.0.0.1:8000/api/llibres');
+      const resBooks = await fetch('https://biblioteca5.ieti.site/api/llibres');
+      // const resBooks = await fetch('http://127.0.0.1:8000/api/llibres');
       if (!resBooks.ok) throw new Error("Error en la carga de libros");
       const booksData = await resBooks.json();
       setBooks(booksData); // Cargamos todos los libros para el autocompletado

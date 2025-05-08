@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 const CsvUpload = () => {
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errores, setErrores] = useState([]);
+  const fileInputRef = useRef(null);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -23,6 +24,7 @@ const CsvUpload = () => {
 
     try {
       const response = await fetch(
+        // "https://biblioteca5.ieti.site/api/subir-documento/",
         "http://127.0.0.1:8000/api/subir-documento/",
         {
           method: "POST",
@@ -31,14 +33,15 @@ const CsvUpload = () => {
       );
 
       const data = await response.json();
+      console.log("DATA:", data);
 
       if (response.ok) {
-        setMessage(
-          `✅ Archivo procesado correctamente. Registros recibidos: ${data.registros.length}`
-        );
+        console.log("OK:", data);
+        setMessage(`✅ Archivo procesado correctamente. Usuarios creados: ${data.usuarios_creados || 0}`);
         setErrores(data.errores || []);
       } else {
-        setMessage(`❌ Error: ${data.mensaje}`);
+        console.log("ERROR:", data);
+        setMessage(`❌ Error: ${data.mensaje || "Error desconocido."}`);
         setErrores(data.errores || []);
       }
     } catch (error) {
@@ -46,6 +49,10 @@ const CsvUpload = () => {
       setMessage("❌ Error al subir el archivo.");
     } finally {
       setIsLoading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""; // limpia el input visualmente
+      }
+      setFile(null); // limpia el estado interno
     }
   };
 
@@ -63,6 +70,7 @@ const CsvUpload = () => {
 
         <div className="mb-4 flex w-full flex-col justify-center">
           <input
+            ref={fileInputRef}
             type="file"
             accept=".csv"
             onChange={handleFileChange}
@@ -82,7 +90,10 @@ const CsvUpload = () => {
           </button>
           <button
             onClick={() => {
-              setFile(null); // Limpiar el archivo
+              if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+              }
+              setFile(null);
               setMessage("");
               setErrores([]);
             }}

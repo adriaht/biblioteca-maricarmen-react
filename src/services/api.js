@@ -1,5 +1,6 @@
+
 // Constantes de configuración
-const BASE_URL = 'http://localhost:8000/api'; // URL base para la API
+const BASE_URL = 'https://biblioteca5.ieti.site/api'; // URL base para la API
 const LLIBRES_ENDPOINT = '/llibres'; // Endpoint para los libros
 const API_URL = `${BASE_URL}${LLIBRES_ENDPOINT}`;
 
@@ -53,6 +54,7 @@ const fetchWithTimeout = async (url, options = {}) => {
     // Rethrow para que se maneje en la función que llamó a fetchWithTimeout
     throw error;
   }
+
 };
 
 /**

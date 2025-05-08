@@ -17,6 +17,8 @@
   --border-color: #DDE1F1;
   --table-bg-hover: #ccc;
   --table-bg:  #DDE1F1;
+  --etiqueta-table-bg:  #ffffff;
+  --etiqueta-text-color: #000000;
 }
 
 /* 2. Si el sistema está en dark y NO hay clases, se activan vars dark */
@@ -36,6 +38,8 @@
     --border-color: #333;
     --table-bg-hover: #383845;
     --table-bg:  #333;
+    --etiqueta-table-bg:  #333;
+    --etiqueta-text-color: #e0e0e0;
 
   }
 }
@@ -56,6 +60,8 @@
   --border-color: #DDE1F1;  
   --table-bg-hover: #ccc;
   --table-bg:  #DDE1F1;
+  --etiqueta-table-bg:  #ffffff;
+  --etiqueta-text-color: #000000;
 }
 .theme-dark {
   --bg-color: #1b1a1a;
@@ -72,6 +78,8 @@
     --border-color: #333;
     --table-bg-hover: #383845;
     --table-bg:  #333;
+    --etiqueta-table-bg:  #333;
+    --etiqueta-text-color: #e0e0e0;
 }
 
 
@@ -86,7 +94,15 @@ body {
   color: var(--text-color);
   margin: 0;
   padding: 0;
+
+  
+  
 }
+
+
+
+
+
 .table {
   width: 1000px;
   border-collapse: separate;
@@ -268,6 +284,13 @@ input {
 
 .container {
   max-width: 1000px;
+  order: 2;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.container-books {
+  width: 1000px !important;
   order: 2;
   margin: 0 auto;
   padding: 20px;
@@ -488,7 +511,6 @@ h3 {
   display: flex;
   flex-direction: column;
   min-height: 240px;
-
 }
 
 .book-card:hover {
@@ -702,7 +724,7 @@ h3 {
 }
 
 .login-button {
-  width: 100%;
+  width: 25%;
   padding: 12px;
   background-color: var(--button-bg);
   color: var(--navbar-text);
@@ -826,6 +848,222 @@ h3 {
     order: 1;
   }
 }
+
+/* Estilos para la pagina de exemplares y impresion de etiquetas */
+
+/* Contenedor general de la lista */
+.exemplars-list {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--card-shadow);
+  border: 1px solid var(--border-color);
+}
+
+/* Estilo para cada ítem */
+
+.exemplar-item p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.exemplar-item {
+  display: flex;
+  flex-direction: column;
+  padding: 1.2rem 1.5rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.6); /* fondo difuminado claro */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 15px var(--card-shadow);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.theme-dark .exemplar-item {
+  background: rgba(30, 30, 30, 0.4); /* fondo difuminado oscuro */
+}
+
+.exemplar-item:hover {
+  transform: translateY(-3px);
+  background-color: var(--table-bg-hover);
+}
+
+/* Elementos internos */
+.exemplar-item .title {
+  margin: 0;
+  color: var(--navbar-bg);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.exemplar-item .author {
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+  margin-top: 0.4rem;
+}
+
+.exemplar-item .year,
+.exemplar-item .details {
+  font-size: 0.85rem;
+  color: var(--text-color);
+  margin-top: 0.3rem;
+}
+
+.batch-actions{
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.batch-btn{
+
+  background-color: var(--table-bg);
+  padding: 10px;
+
+}
+
+
+
+.add-remove-btn{
+  margin-left: 40px;
+  background-color: var(--table-bg);
+  padding: 10px;
+}
+
+.carrito-list {
+  display: table;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  background-color: var(--table-bg);
+  padding: 0.5rem;
+}
+
+.carrito-item {
+  display: table-row;
+  background-color: var(--card-bg);
+  box-shadow: 0 2px 4px var(--card-shadow);
+  border-radius: 8px;
+  overflow: hidden;
+  color: var(--text-color);
+  transition: background-color 0.3s ease;
+}
+
+.carrito-item:nth-child(even) {
+  background-color: var(--table-bg-hover);
+}
+
+.carrito-item:hover {
+  background-color: var(--table-bg-hover);
+}
+
+.carrito-item > * {
+  display: table-cell;
+  padding: 12px 16px;
+  vertical-align: middle;
+}
+
+.carrito-item {
+  display: flex;
+  align-items: center;        /* Centra verticalmente el texto y el botón */
+  justify-content: space-between; /* Espacia al máximo el contenido */
+  /* opcional: padding, border, etc. */
+}
+.carrito-item .remove-btn:hover {
+  color: red;
+}
+
+
+/* impresion de etiquetas */
+
+.imprimir-container {
+  margin: 0;
+  padding: 0;
+}
+
+.print-btn {
+  margin-bottom: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: var(--button-bg);
+  color: white;
+}
+
+.printPage {
+  width: 210mm;
+  height: 297mm;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.labelsTable {
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.labelsTable td {
+  color: var(--etiqueta-text-color);
+  background-color: var(--etiqueta-table-bg);
+  width: 4.8cm;
+  height: 1.7cm;
+  padding: 0;
+  box-sizing: border-box;
+  border: 1px solid var(--text-color);
+  vertical-align: top;
+  overflow: hidden;
+}
+
+.emptyCell {
+  border: none;
+}
+
+.labelCenter {
+  font-weight: bold;
+  font-size: 6pt;
+  text-align: center;
+}
+
+.barcodeImg {
+  
+  width: 100%;
+  display: block;
+  height: 35px;
+  padding: 1mm;
+
+}
+
+.labelCdu {
+  margin-left: 10px;
+  font-style: italic;
+  font-size: 8pt;
+
+}
+
+.labelCDU{
+  margin-left: 10px;
+  font-weight: bold;
+  font-style: italic ;
+  font-size: 10pt ;  
+  text-align: center;
+  width: 100%;
+}
+/* 
+
+
+*/
 
 /* Adaptación a móviles */
 @media (max-width: 768px) {
