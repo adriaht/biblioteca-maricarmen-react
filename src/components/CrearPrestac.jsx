@@ -10,7 +10,11 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
   const [exemplars, setExemplars] = useState([]);
   const [selectedExemplar, setSelectedExemplar] = useState(null);
   const [message, setMessage] = useState("");
-  const [reservaFecha, setReservaFecha] = useState("");
+  const [reservaFecha, setReservaFecha] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  });
+  
   const [loading, setLoading] = useState({
     users: false,
     exemplars: false,
@@ -139,14 +143,11 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
     const fetchExemplars = async () => {
       setLoading(prev => ({ ...prev, exemplars: true }));
       try {
-        const token = localStorage.getItem("authToken");
-        const response = await fetch("https://biblioteca5.ieti.site/api/exemplars/", {
-          
-        });
+        const response = await fetch(`https://biblioteca5.ieti.site/api/llibres/${bookId}/amb_exemplars`);
         const data = await response.json();
-        const disponibles = data.filter(
-          e => e.cataleg?.id === parseInt(bookId) && !e.baixa && !e.exclos_prestec
-        );
+        const disponibles = data.exemplars.filter(e => !e.exclos_prestec);
+        setExemplars(disponibles);
+
         setExemplars(disponibles);
       } catch (error) {
         console.error("Error:", error);
@@ -164,159 +165,153 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
 
   return (
     <>
-    <div className="container-books">
-    <div className="w-[800px] mt-10 mx-auto p-4 bg-white rounded-lg shadow-md">
-
-      <h3 className="text-xl font-semibold mb-6 text-center text-white py-3 rounded-md shadow"
-        style={{ backgroundColor: 'rgba(59, 130, 246, 0.5)' }}
-      >
-        Crear préstec 
-      </h3>
-      <h2
-        className="text-lg font-semibold mb-6 text-center text-blue-500 bg-white border border-blue-500 py-2 rounded-md shadow"
-      >
-        {bookTitle}
-      </h2>
-
-
-
-        {/* Buscador de usuarios */}
-        <div className="mb-6">
-          <LabelInput
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Cerca usuari..."
-            className="w-full p-2 border rounded"
-          />
-        </div>
-
-        {/* Lista de usuarios */}
-        {loading.users ? (
-          <p>Carregant usuaris...</p>
-        ) : (
-          filteredUsers.length > 0 && (
-            <div className="mb-6">
-              <h2 className="text-lg font-semibold mb-2">Usuaris:</h2>
-              <div className="max-h-60 overflow-y-auto border rounded">
-                {filteredUsers.map(u => (
-                  <div
-                  key={u.id}
-                    onClick={() => setSelectedUser(u)}
-                    className={`p-3 hover:bg-gray-100 cursor-pointer ${
-                      selectedUser?.id === u.id
-                        ? "bg-blue-50 border-l-4 border-blue-500"
-                        : ""
-                    }`}
-                  >
-                    <p className="font-medium">{u.first_name} {u.last_name}</p>
-                    <p className="text-sm text-gray-600">{u.username} | {u.email}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )
-        )}
-
-        {selectedUser && (
-          <>
-            <div className="mb-4 p-2 border rounded bg-blue-50">
-            <p className="font-semibold">Usuaris seleccionats:</p>
-            <p>{selectedUser.first_name} {selectedUser.last_name} - {selectedUser.email}</p>
-            <p>Telèfon: {selectedUser.telefon}</p>
-            {selectedUser.centre && <p>Centra: {selectedUser.centre}</p>}
-          </div>
-
-          <div className="mb-6 relative z-10">
-              <label className="block text-lg font-semibold mb-2">Data de préstec:</label>
-              <input
-                type="date"
-                value={reservaFecha}
-                onChange={(e) => setReservaFecha(e.target.value)}
-                className="w-full p-2 border rounded"
-                min={new Date().toISOString().split('T')[0]}
-                required
-              />
-            </div>
-
-            <div className="mb-6 relative z-10">
-            <label className="block text-lg font-semibold mb-2">Data de retorn prevista:</label>
-            <input
-              type="date"
-              value={retornFecha}
-              onChange={(e) => setRetornFecha(e.target.value)}
+      <div className="container-books">
+        <div className="w-[800px] mt-10 mx-auto p-4 bg-white rounded-lg shadow-md">
+  
+          <h3 className="text-xl font-semibold mb-6 text-center text-white py-3 rounded-md shadow"
+            style={{ backgroundColor: 'rgba(59, 130, 246, 0.5)' }}
+          >
+            Crear préstec 
+          </h3>
+          <h2
+            className="text-lg font-semibold mb-6 text-center text-blue-500 bg-white border border-blue-500 py-2 rounded-md shadow"
+          >
+            {bookTitle}
+          </h2>
+  
+          {/* Buscador de usuarios */}
+          <div className="mb-6">
+            <LabelInput
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Cerca usuari..."
               className="w-full p-2 border rounded"
-              min={reservaFecha || new Date().toISOString().split('T')[0]}
             />
           </div>
-
-
-
-
-            {/* Ejemplares y fecha */}
-            <div className="mb-6">
-              <h2 className="text-lg font-semibold mb-2">Exemplars disponibles:</h2>
-              {loading.exemplars ? (
-                <p>Carregant exemplars...</p>
-              ) : exemplars.length > 0 ? (
-                <div className="flex flex-col gap-2">
-                  {exemplars.map(e => (
+  
+          {/* Lista de usuarios */}
+          {loading.users ? (
+            <p>Carregant usuaris...</p>
+          ) : (
+            filteredUsers.length > 0 && (
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold mb-2 text-blue-600">Usuaris:</h2>
+                <div className="max-h-60 overflow-y-auto border rounded">
+                  {filteredUsers.map(u => (
                     <div
-                      key={e.id}
-                      onClick={() => setSelectedExemplar(e)}
-                      className={`p-3 border rounded cursor-pointer ${
-                        selectedExemplar?.id === e.id
-                          ? "bg-green-50 border-green-500"
+                      key={u.id}
+                      onClick={() => setSelectedUser(u)}
+                      className={`p-3 hover:bg-gray-100 cursor-pointer ${
+                        selectedUser?.id === u.id
+                          ? "bg-blue-50 border-l-4 border-blue-500"
                           : ""
                       }`}
                     >
-                      <p>Registre: {e.registre}</p>
-                      {e.centre && <p className="text-sm">Centre: {e.centre.nom}</p>}
+                      <p className="font-medium text-black">{u.first_name} {u.last_name}</p>
+                      <p className="text-sm text-black">{u.username} | {u.email}</p>
                     </div>
                   ))}
                 </div>
-              ) : (
-                <p className="text-red-500">No hi ha exemplars disponibles</p>
-              )}
+              </div>
+            )
+          )}
+  
+          {selectedUser && (
+            <>
+              <div className="mb-4 p-2 border rounded bg-blue-50">
+                <p className="font-semibold text-blue-600">Usuaris seleccionats:</p>
+                <p className="text-black">{selectedUser.first_name} {selectedUser.last_name} - {selectedUser.email}</p>
+                <p className="text-black">Telèfon: {selectedUser.telefon}</p>
+                {selectedUser.centre && <p className="text-black">Centra: {selectedUser.centre}</p>}
+              </div>
+  
+              <div className="mb-6 relative z-10">
+                <label className="block text-lg font-semibold mb-2 text-blue-600">Data de préstec:</label>
+                <input
+                  type="date"
+                  value={reservaFecha}
+                  onChange={(e) => setReservaFecha(e.target.value)}
+                  className="w-full p-2 border rounded"
+                  min={new Date().toISOString().split('T')[0]}
+                  required
+                />
+              </div>
+  
+              <div className="mb-6 relative z-10">
+                <label className="block text-lg font-semibold mb-2 text-blue-600">Data de retorn prevista:</label>
+                <input
+                  type="date"
+                  value={retornFecha}
+                  onChange={(e) => setRetornFecha(e.target.value)}
+                  className="w-full p-2 border rounded"
+                  min={reservaFecha || new Date().toISOString().split('T')[0]}
+                />
+              </div>
+  
+              {/* Ejemplares y fecha */}
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold mb-2 text-blue-600">Exemplars disponibles:</h2>
+                {loading.exemplars ? (
+                  <p>Carregant exemplars...</p>
+                ) : exemplars.length > 0 ? (
+                  <div className="flex flex-col gap-2">
+                    {exemplars.map(e => (
+                      <div
+                        key={e.id}
+                        onClick={() => setSelectedExemplar(e)}
+                        className={`p-3 border rounded cursor-pointer ${
+                          selectedExemplar?.id === e.id
+                            ? "bg-green-50 border-green-500"
+                            : ""
+                        }`}
+                      >
+                        <p className="text-black">Registre: {e.registre}</p>
+                        {e.centre && <p className="text-sm text-black">Centre: {e.centre.nom}</p>}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-red-500">No hi ha exemplars disponibles</p>
+                )}
+              </div>
+  
+              <div className="flex justify-between">
+                <Button
+                  text={loading.creating ? "Creando..." : "Confirmar préstamo"}
+                  onClick={handleCrearPrestac}
+                  disabled={!selectedExemplar || !reservaFecha || loading.creating}
+                  className={`${
+                    !selectedExemplar || !reservaFecha
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-blue-600 hover:bg-blue-700'
+                  } text-white px-4 py-2 rounded`}
+                />
+                <Button
+                  text="Volver"
+                  onClick={onBack}
+                  className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+                />
+              </div>
+            </>
+          )}
+  
+          {message && (
+            <div
+              className={`mt-4 p-3 rounded ${
+                message.includes("✅")
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
+              }`}
+            >
+              {message}
             </div>
-
-         
-            <div className="flex justify-between">
-              <Button
-                text={loading.creating ? "Creando..." : "Confirmar préstamo"}
-                onClick={handleCrearPrestac}
-                disabled={!selectedExemplar || !reservaFecha || loading.creating}
-                className={`${
-                  !selectedExemplar || !reservaFecha
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-700'
-                } text-white px-4 py-2 rounded`}
-              />
-              <Button
-                text="Volver"
-                onClick={onBack}
-                className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
-              />
-            </div>
-          </>
-        )}
-
-        {message && (
-          <div
-            className={`mt-4 p-3 rounded ${
-              message.includes("✅")
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
-            }`}
-          >
-            {message}
-          </div>
-        )}
-      </div>
+          )}
+        </div>
       </div>
     </>
-    
   );
+  
 }
 
 export default CrearPrestac;
