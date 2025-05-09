@@ -5,15 +5,24 @@ import Button from "../components/Button";
 import Header from "../components/Header";
 import Paragraph from "../components/Paragraph";
 import Sidebar from "../components/Sidebar";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
-function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCatalag, backToLogin }) {
+function Login({
+  setAuthenticated,
+  setUser,
+  setRole,
+  setGrupos,
+  setToken,
+  goToCatalag,
+  backToLogin,
+}) {
   console.log("Login iniciat ...");
 
   const [username, setUsernameLocal] = useState("");
   const [password, setPasswordLocal] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [localGrupos, setLocalGrupos] = useState([]);
- 
 
   // Cargar credenciales desde localStorage
   useEffect(() => {
@@ -62,7 +71,7 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
         setGrupos(data.grupos);
 
         // Asignar token y mostrarlo
-        const receivedToken = data.token;  // Aquí supongo que el token viene en data.token
+        const receivedToken = data.token; // Aquí supongo que el token viene en data.token
         console.log("Token recibido:", receivedToken);
         setToken(receivedToken); // Guardar el token en el estado local
 
@@ -72,8 +81,7 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
         if (data.grupos.includes("Admin")) {
           setRole("admin");
           setErrorMessage("");
-        }
-        else if (data.grupos.includes("Bibliotecario")) {
+        } else if (data.grupos.includes("Bibliotecario")) {
           setRole("bibliotecario");
           setErrorMessage("");
         } else if (data.grupos.includes("usuari")) {
@@ -83,7 +91,6 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
           setRole("guest");
           setErrorMessage("");
         }
-
 
         backToLogin();
       } else {
@@ -97,7 +104,7 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
   };
 
   return (
-    <div className="container"style={{marginTop:"80px",width:"700px"}}>
+    <div className="container" style={{ marginTop: "80px", width: "700px" }}>
       <Header level={1}>Login</Header>
       <LabelInput
         label="Nom d'usuari"
@@ -116,10 +123,38 @@ function Login({ setAuthenticated, setUser, setRole, setGrupos,setToken , goToCa
         onChange={(e) => setPasswordLocal(e.target.value)}
         autoComplete="current-password"
       />
-      <Button text="Inicia sessió" onClick={handleLogin} className = "login-button" />
+      <Button
+        text="Inicia sessió"
+        onClick={handleLogin}
+        className="login-button"
+      />
       {errorMessage && (
         <Paragraph style={{ color: "red" }}>{errorMessage}</Paragraph>
       )}
+      <GoogleLogin
+        onSuccess={(credentialResponse) => {
+          console.log("Login Google exitoso:", credentialResponse);
+          const decoded = jwtDecode(credentialResponse.credential);
+          console.log("Datos del usuario Google:", decoded);
+
+          setUser(decoded.email || decoded.name);
+          setAuthenticated(true);
+          setRole("usuari");
+          setToken(credentialResponse.credential);
+          localStorage.setItem("authToken", credentialResponse.credential);
+          backToLogin();
+        }}
+        onError={() => {
+          console.log("Error al iniciar sesión con Google");
+          setErrorMessage("Error al iniciar sesión con Google");
+        }}
+        theme="outline"
+        size="large"
+        text="signin_with"
+        shape="rectangular"
+        logo_alignment="left"
+        width="300"
+      />
     </div>
   );
 }
