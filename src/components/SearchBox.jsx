@@ -53,7 +53,7 @@ function SearchBox({ books, onSearch, onSelectBook }) {
           className="search-input"
           value={searchTerm}
           onChange={handleChange}
-          placeholder="Cercar llibres per títol o autor..."
+          
           onFocus={() => searchResults.length > 0 && setShowResults(true)}
         />
         <button type="submit" className="search-button">🔍</button>
