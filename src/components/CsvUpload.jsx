@@ -110,7 +110,7 @@ const CsvUpload = () => {
 
         {errores.length > 0 && (
           <div className="mt-4 bg-red-100 border border-red-400 text-red-700 p-4 rounded-lg max-h-80 overflow-y-auto">
-            <h3 className="font-semibold mb-2">Registros no procesados:</h3>
+            <h3 className="font-semibold mb-2">Registres no processats:</h3>
             <ul className="list-disc pl-5 text-sm space-y-3">
               {errores.map((err, index) => (
                 <li key={index}>

@@ -278,7 +278,7 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
   
               <div className="flex justify-between">
                 <Button
-                  text={loading.creating ? "Creando..." : "Confirmar préstamo"}
+                  text={loading.creating ? "Creant..." : "Confirmar préstec"}
                   onClick={handleCrearPrestac}
                   disabled={!selectedExemplar || !reservaFecha || loading.creating}
                   className={`${
@@ -288,7 +288,7 @@ function CrearPrestac({ bookId, bookTitle, onBack }) {
                   } text-white px-4 py-2 rounded`}
                 />
                 <Button
-                  text="Volver"
+                  text="Tornar"
                   onClick={onBack}
                   className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
                 />

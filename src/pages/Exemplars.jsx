@@ -146,7 +146,7 @@ function Exemplars({ goToCarrito }) {
     <div className="container">
       <div className="exemplars-container" onClick={e => e.stopPropagation()}>
         <header className="exemplars-header">
-          <h1>Gestión de Exemplars</h1>
+          <h1>Gestió d'Exemplars</h1>
           <div className="carrito-summary" style={{ margin: '10px' }} onClick={handleToggleCarrito}>
             {selectedCarrito ? <span className="back-icon">← Volver</span> : <><span className="carrito-icon">Lista 🛒: </span><span className="carrito-count">{selected.length}</span></>}
           </div>

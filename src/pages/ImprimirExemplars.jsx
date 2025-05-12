@@ -147,7 +147,7 @@ export default function ImprimirExemplars({ items, onPrint }) {
                 <React.Fragment key={item.id}>
                   <td>
                     <div className="labelCenter">{item.centre.nom}</div>
-                    <img className="barcodeImg" crossOrigin="anonymous" src={`https://api-bwipjs.metafloor.com/?bcid=code128&text=${encodeURIComponent(item.registre)}&includetext=false&scale=2&height=10`} alt="Código de barras" />
+                    <img className="barcodeImg" crossOrigin="anonymous" src={`https://api-bwipjs.metafloor.com/?bcid=code128&text=${encodeURIComponent(item.registre)}&includetext=false&scale=2&height=10`} alt="Codi de barres" />
                     <div className="labelCenter">{item.registre}</div>
                   </td>
                   <td>
@@ -174,7 +174,7 @@ export default function ImprimirExemplars({ items, onPrint }) {
           className="print-btn"
           disabled={downloading}
         >
-          {downloading ? 'Generando...' : 'Descargar PDF'}
+          {downloading ? 'Generant...' : 'Descarregar PDF'}
         </button>
         {onPrint && <button onClick={onPrint} className="print-btn">Tornar a la llista</button>}
       </div>

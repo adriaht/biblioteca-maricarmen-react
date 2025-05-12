@@ -1,4 +1,3 @@
-
 function BookItem({ book, onSelect, totalExemplars }) {
 
   return (
